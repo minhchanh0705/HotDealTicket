@@ -46,7 +46,7 @@ export default class RegisterScreen extends Component {
         })
             .then((response) => response.json())
             .then((responseJSON) => {
-                access_token = responseJSON.access_token;
+                access_token = responseJSON.token;
                 if (access_token != undefined) {
                     try {
                         AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(responseJSON));

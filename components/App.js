@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import Router from './Ticket/Router';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import TabNavigator from '../LoginForm/Navigation/TabNavigator';
@@ -14,6 +13,7 @@ export default class App extends Component {
   }
 }
 const defaultState = {
+  language:'vi',
   banners: [],
   categories: [],
   events: [],
@@ -49,6 +49,9 @@ const reducer = (state = defaultState, action) => {
       return { ...state, events: action.events };
     case 'NAV':
       return { ...state, detailId: action.detailId };
+    case 'CHANGE_LANGUAGE':
+      console.log(action.language)
+      return { ...state, language: action.language };
     case 'TOGGLE_DONE':
       return { ...state, done: action.done };
     case 'PASS_DETAIL':

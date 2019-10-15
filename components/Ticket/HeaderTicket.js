@@ -1,17 +1,21 @@
 import React, { Component } from 'react';
 import { Picker, View, Text, StyleSheet } from 'react-native';
 import { Header, Image } from 'react-native-elements';
+import {connect} from 'react-redux';
 // import Icon from 'react-native-vector-icons/FontAwesome'
 
-export default class HeaderTicket extends Component {
+class HeaderTicket extends Component {
     constructor(props) {
         super(props);
         this.state = { language: '' };
     };
-    saveLanguage = (lang) => {
-        this.setState({ language: lang });
+    saveLanguage = (language) => {
+        this.setState({ language: language });
+        this.props.dispatch({
+            type: 'CHANGE_LANGUAGE',
+            language: language
+        })
     };
-    
     render() {
         
         return (
@@ -39,3 +43,4 @@ export default class HeaderTicket extends Component {
         );
     }
 } 
+export default connect ()(HeaderTicket);

@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, Picker, Text, ScrollView, Dimensions, StyleSheet } from 'react-native';
-
-import ModalDropdown from 'react-native-modal-dropdown';
+import { View, Image, Text, ScrollView, Dimensions, StyleSheet } from 'react-native';
 import Categories from './Categories';
 import HeaderTicket from './HeaderTicket';
 import Banner from './Banner';
@@ -29,7 +27,7 @@ class MainTicket extends Component {
                 <View>
                     <HeaderTicket />
                 </View>
-                <View><Text>{this.props.lang}</Text></View>
+                <View><Text>{this.props.language}</Text></View>
                 <View style={{ alignItems: 'center', height: 180, width: screenWidth, backgroundColor: '#e6e6e6' }}>
                     <Banner />
                 </View>
@@ -44,7 +42,7 @@ class MainTicket extends Component {
 function mapStatetoProps(state) {
     return {
         detailId: state.detailId,
-        lang: state.languagez
+        language: state.language
     };
 }
 export default connect(mapStatetoProps)(MainTicket);

@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import Router from './Router';
+// import Router from './Ticket/Router';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
+import TabNavigator from '../LoginForm/Navigation/TabNavigator';
 
-export default class ToDoList extends Component {
+export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <Router />
+        <TabNavigator />
       </Provider>
     );
   }
@@ -22,19 +23,19 @@ const defaultState = {
     title: '',
     place: '',
     address: '',
-    ward:'',
-    district:'',    
-    state:'',
+    ward: '',
+    district: '',
+    state: '',
     from: '',
     to: '',
     description: '',
     avatar: '',
-    timeTicket:'',
-    priceTicket:'',
-    nameTicket:'',
-    partnerImg:'',
-    partnerName:'',
-    partnerDesc:''
+    timeTicket: '',
+    priceTicket: '',
+    nameTicket: '',
+    partnerImg: '',
+    partnerName: '',
+    partnerDesc: ''
   }
 
 };
@@ -65,11 +66,11 @@ const reducer = (state = defaultState, action) => {
           avatar: action.avatar,
           from: action.from,
           to: action.to,
-          timeTicket:action.timeTicket,
-          priceTicket:action.priceTicket,
+          timeTicket: action.timeTicket,
+          priceTicket: action.priceTicket,
           nameTicket: action.nameTicket,
-          partnerImg:action.partnerImg,
-          partnerName:action.partnerName,
+          partnerImg: action.partnerImg,
+          partnerName: action.partnerName,
           partnerDesc: action.partnerDesc
         }
       };

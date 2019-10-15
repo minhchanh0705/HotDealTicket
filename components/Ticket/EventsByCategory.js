@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, Dimensions, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, FlatList, Dimensions, TouchableOpacity, ActivityIndicator  } from 'react-native';
 import axios from 'axios';
+import { Image } from 'react-native-elements';
 import { connect } from 'react-redux';
 import NumberFormat from 'react-number-format';
 
@@ -105,7 +106,9 @@ class EventsByCategory extends Component {
                                     <View>
                                         <Image
                                             source={{ uri: item.banner }}
-                                            style={{ width: screenWidth - 20, height: 140 }} />
+                                            style={{ width: screenWidth - 20, height: 140 }} 
+                                            PlaceholderContent={<ActivityIndicator />}
+                                            />
                                         <Text style={{
                                             backgroundColor: '#d9d9d9',
                                             fontWeight: 'bold',
@@ -155,69 +158,69 @@ class EventsByCategory extends Component {
                                                             }}>{value}Đ</Text>
                                                         }
                                                     />
-                                                        
+
                                                 </View>
-                                )
-                        }
+                                            )
+                                    }
                                     <Text style={{ flex: 2 }}></Text>
-                            </View>
-                            <View style={{
-                                flex: 1,
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                                alignSelf: 'stretch'
-                            }}>
-                                <View style={{
-                                    flex: 1,
-                                    justifyContent: 'center',
-                                    margin: 14
-                                }}>
-                                    <Text style={{
-                                        color: '#cc3300',
-                                        backgroundColor: '#d9d9d9',
-                                        borderStyle: 'solid',
-                                        borderWidth: 1,
-                                        borderColor: 'black',
-                                        marginTop: 12,
-                                        textAlign: 'center',
-                                        borderRadius: 10,
-                                        padding: 5,
-                                        fontSize: 15
-                                    }}>
-                                        {item.state}
-                                    </Text>
                                 </View>
-                                <View style={{ flex: 1 }}></View>
                                 <View style={{
                                     flex: 1,
-                                    flexDirection: 'column',
-                                    alignItems: 'center',
-                                    borderStyle: 'solid',
-                                    borderWidth: 0.5,
-                                    borderColor: 'black',
-                                    margin: 8
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                    alignSelf: 'stretch'
                                 }}>
                                     <View style={{
-                                        backgroundColor: '#cc3300',
-                                        width: '100%',
-                                        alignItems: 'center',
+                                        flex: 1,
+                                        justifyContent: 'center',
+                                        margin: 14
                                     }}>
-                                        <Text style={{ fontSize: 17, color: 'white' }}>
-                                            {this.convertMonth(item.datetime)}
+                                        <Text style={{
+                                            color: '#cc3300',
+                                            backgroundColor: '#d9d9d9',
+                                            borderStyle: 'solid',
+                                            borderWidth: 1,
+                                            borderColor: 'black',
+                                            marginTop: 12,
+                                            textAlign: 'center',
+                                            borderRadius: 10,
+                                            padding: 5,
+                                            fontSize: 15
+                                        }}>
+                                            {item.state}
                                         </Text>
                                     </View>
-                                    <View style={{ backgroundColor: '#d9d9d9', width: '100%', alignItems: 'center' }}>
-                                        <Text style={{ color: 'red', fontWeight: 'bold', fontSize: 25 }}>
-                                            {this.convertDay(item.datetime)}
-                                        </Text>
-                                        <Text style={{ color: 'black', fontSize: 17 }}>
-                                            {this.convertWDay(item.datetime)}
-                                        </Text>
+                                    <View style={{ flex: 1 }}></View>
+                                    <View style={{
+                                        flex: 1,
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        // borderStyle: 'solid',
+                                        borderWidth: 0.8,
+                                        borderColor: 'black',
+                                        margin: 8
+                                    }}>
+                                        <View style={{
+                                            backgroundColor: '#cc3300',
+                                            width: '100%',
+                                            alignItems: 'center',
+                                        }}>
+                                            <Text style={{ fontSize: 17, color: 'white' }}>
+                                                {this.convertMonth(item.datetime)}
+                                            </Text>
+                                        </View>
+                                        <View style={{ backgroundColor: '#d9d9d9', width: '100%', alignItems: 'center' }}>
+                                            <Text style={{ color: 'red', fontWeight: 'bold', fontSize: 25 }}>
+                                                {this.convertDay(item.datetime)}
+                                            </Text>
+                                            <Text style={{ color: 'black', fontSize: 17 }}>
+                                                {this.convertWDay(item.datetime)}
+                                            </Text>
+                                        </View>
                                     </View>
                                 </View>
                             </View>
-                            </View>
-                }
+                        }
                         keyExtractor={item => item.id + ''}>
                     </FlatList>
                 </View >

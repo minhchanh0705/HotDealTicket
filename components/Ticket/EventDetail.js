@@ -11,6 +11,11 @@ import NumberFormat from 'react-number-format';
 
 const { width: screenWidth } = Dimensions.get('window')
 class EventDetail extends Component {
+    static navigationOptions = {
+        header: (
+            <View/>
+        )
+    };
     state = {
         fadeValue: new Animated.Value(0)
     };

@@ -10,13 +10,13 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { Input, Button, Icon } from 'react-native-elements';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
-const BASE_URL = "http://api.ticket-staging.hotdeal.vn/api";
 var STORAGE_KEY = 'key_access_token';
-const BG_IMAGE = require('./bg_screen1.jpg');
+const BG_IMAGE = require('../img/bg_screen1.jpg');
 export default class MainScreen extends Component {
     static navigationOptions = {
-        title: 'MainScreen',
-        header: null,
+        header: (
+            <View/>
+        )
     };
     constructor(props) {
         super(props);
@@ -27,13 +27,10 @@ export default class MainScreen extends Component {
             AsyncStorage.getItem(STORAGE_KEY).then((user_data_json) => {
                 let userData = JSON.parse(user_data_json);
                 if (userData == undefined) {                    
-                    // var { navigate } = this.props.navigation;
-                    // navigate('LoginScreen');
                     this.setState({
                         email: '',
                     });
                 } else {
-                    // console.log('...'+userData.email)
                     this.setState({
                         email: userData.email,
                     });
@@ -44,9 +41,7 @@ export default class MainScreen extends Component {
         } catch (error) {
             console.log('AsyncStorage error: ' + error.message);
         }
-        
     }
-
     _onPressLogout(event) {
         try {
             AsyncStorage.removeItem(STORAGE_KEY);
@@ -56,7 +51,6 @@ export default class MainScreen extends Component {
             console.log('AsyncStorage error: ' + error.message);
         }
     }
-
     render() {
         return (
             <View style={styles.container}>

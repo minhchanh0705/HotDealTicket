@@ -2,13 +2,17 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import EventDetail from './EventDetail'
 import { connect } from 'react-redux';
-
+import {View} from 'react-native'
 class TicketDetail extends Component {
     constructor(props) {
         super(props);
         this.getDetail(this.props.myDetailId);
     }
-
+    static navigationOptions = {
+        header: (
+            <View/>
+        )
+    };
     getDetail(detailId) {
         axios.get(`https://api-ticket.hotdeal.vn/api/ticket/event/` + detailId)
             .then(res => {

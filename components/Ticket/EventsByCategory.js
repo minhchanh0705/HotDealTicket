@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, Dimensions, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, FlatList, Dimensions, TouchableOpacity, ActivityIndicator  } from 'react-native';
 import axios from 'axios';
+import { Image } from 'react-native-elements';
 import { connect } from 'react-redux';
 import NumberFormat from 'react-number-format';
 
@@ -105,7 +106,9 @@ class EventsByCategory extends Component {
                                     <View>
                                         <Image
                                             source={{ uri: item.banner }}
-                                            style={{ width: screenWidth - 20, height: 140 }} />
+                                            style={{ width: screenWidth - 20, height: 140 }} 
+                                            PlaceholderContent={<ActivityIndicator />}
+                                            />
                                         <Text style={{
                                             backgroundColor: '#d9d9d9',
                                             fontWeight: 'bold',
@@ -192,8 +195,8 @@ class EventsByCategory extends Component {
                                         flex: 1,
                                         flexDirection: 'column',
                                         alignItems: 'center',
-                                        borderStyle: 'solid',
-                                        borderWidth: 0.5,
+                                        // borderStyle: 'solid',
+                                        borderWidth: 0.8,
                                         borderColor: 'black',
                                         margin: 8
                                     }}>

@@ -1,21 +1,27 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
-import HeaderTicket from './HeaderTicket';
+import { View, Image, Picker, Text, ScrollView, Dimensions, StyleSheet, } from 'react-native';
+
 import Categories from './Categories';
+import HeaderTicket from './HeaderTicket';
 import Banner from './Banner';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 const { width: screenWidth } = Dimensions.get('window')
 class MainTicket extends Component {
+    static navigationOptions = {
+        header: (
+            <View/>
+        )
+    };
     render() {
         if (this.props.detailId != 0) {
             this.props.navigation.navigate('TicketDetail', {
                 detailId1: this.props.detailId
             });
-        } 
+        }
         this.props.dispatch({
             type: 'TOGGLE_DONE',
-            done: "false"
+            done: "false",
         });
         return (
             <ScrollView>
@@ -35,7 +41,15 @@ class MainTicket extends Component {
 
 function mapStatetoProps(state) {
     return {
-        detailId: state.detailId
+        detailId: state.detailId,
+        lang: state.languagez
     };
 }
 export default connect(mapStatetoProps)(MainTicket);
+const styles = StyleSheet.create({
+    text: {
+       fontSize: 30,
+       alignSelf: 'center',
+       color: 'red'
+    }
+ })

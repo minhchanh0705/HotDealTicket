@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, Dimensions, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Dimensions, ActivityIndicator } from 'react-native';
 import axios from 'axios';
+import { Image } from 'react-native-elements';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { connect } from 'react-redux';
 const { width: screenWidth } = Dimensions.get('window')
@@ -21,9 +22,13 @@ class Banner extends Component {
                 })
             })
     }
-    _renderItem({ item, index }) {
+    _renderItem({ item }) {
         return (
-            <Image source={{ uri: item.banner }} style={{ width: screenWidth , height: 163 }} />
+            <Image
+                source={{ uri: item.banner }}
+                style={{ width: screenWidth, height: 163 }}
+                PlaceholderContent={<ActivityIndicator />}
+            />
         );
     }
     get pagination() {
@@ -33,7 +38,7 @@ class Banner extends Component {
             <Pagination
                 dotsLength={myBanners.length}
                 activeDotIndex={activeSlide}
-                containerStyle={{ paddingVertical:5}}
+                containerStyle={{ paddingVertical: 5 }}
             />
         );
     }

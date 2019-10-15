@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import {
     StyleSheet,
     Text,
+    ImageBackground,
     View,
     Alert,
-    ImageBackground,
     Dimensions
 } from 'react-native';
 import { Input, Button, Icon } from 'react-native-elements';
@@ -12,34 +12,30 @@ import AsyncStorage from '@react-native-community/async-storage';
 const BASE_URL = "http://api.ticket-staging.hotdeal.vn/api";
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
-const BG_IMAGE = require('./bg_screen1.jpg');
-
+const BG_IMAGE = require('../img/bg_screen1.jpg');
 var STORAGE_KEY = 'key_access_token';
-export default class LoginScreen extends Component {
+export default class RegisterScreen extends Component {
+    static navigationOptions = {
+        header: (
+            <View/>
+        )
+    };
     constructor(props) {
         super(props);
         
         this.state = {
-            email: '',
+            name: '',
+            email:'',
             password: '',
         };
     }
-
-    _onPressRegister(event) {
-        var { navigate } = this.props.navigation;
-        navigate('RegisterScreen');
-    }
-    _onTestLogin(event) {
-        var { navigate } = this.props.navigation;
-        navigate('MainScreen');
-    }
-    _onPressLogin(event) {
-        let serviceUrl = BASE_URL + "/user/login";
+    _onPressRegisterBtn(event) {
+        let serviceUrl = BASE_URL + "/user/register";
+        let name = this.state.name;
         let email = this.state.email;
         let password = this.state.password;
         var access_token = '';
-        console.log("email=" + email + "&password=" + password)
-        
+        var { navigate } = this.props.navigation;
         fetch(serviceUrl, {
             method: "POST",
 
@@ -48,53 +44,81 @@ export default class LoginScreen extends Component {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                email: email, password: password
+                name: name,
+                email: email,
+                password: password
               }),
         })
             .then((response) => response.json())
             .then((responseJSON) => {
                 access_token = responseJSON.token;
-                console.log("access_token=" + access_token)
                 if (access_token != undefined) {
                     try {
                         AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(responseJSON));
-                        var { navigate } = this.props.navigation;
-                        navigate('MainScreen');
+                        navigate('LoginScreen');
                     } catch (error) {
                         console.log('AsyncStorage error: ' + error.message);
                     }
+
                 }
                 else {
-                    Alert.alert('Login failure');
+                    Alert.alert('Register failure');
                 }
+
             })
             .catch((error) => {
                 console.warn(error);
             });
+
+
     }
     static navigationOptions = {
-        title: 'LoginScreen',
+        title: 'RegisterScreen',
         header: null,
     };
     render() {
-        const { email, password } = this.state;
+        const { email, password, name } = this.state;
         return (
             <View style={styles.container}>
                 <ImageBackground source={BG_IMAGE} style={styles.bgImage}>
-                    <View style={styles.loginView}>
-                        <View style={styles.loginTitle}>
+                    <View style={styles.registerView}>
+                        <View style={styles.registerTitle}>
                             <View style={{ flexDirection: 'row' }}>
-                                <Text style={styles.headerText}>Login Form</Text>
+                                <Text style={styles.travelText}>Register Form</Text>
                             </View>
                         </View>
-                        <View style={styles.loginInput}>
+                        <View style={styles.registerInput}>
+                            <Input
+                                leftIcon={
+                                    <Icon
+                                        name="user-o"
+                                        type="font-awesome"
+                                        color="rgba(171, 189, 219, 1)"
+                                        size={25}
+                                    />
+                                }
+                                containerStyle={{ marginVertical: 10 }}
+                                onChangeText={name => this.setState({ name })}
+                                value={name}
+                                inputStyle={{ marginLeft: 10, color: 'white' }}
+                                keyboardAppearance="light"
+                                placeholder="Username"
+                                autoFocus={false}
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                returnKeyType="next"
+                                blurOnSubmit={false}
+                                placeholderTextColor="white"
+                                errorStyle={{ textAlign: 'center', fontSize: 12 }}
+                            />
                             <Input
                                 leftIcon={
                                     <Icon
                                         name="envelope-o"
                                         type="font-awesome"
                                         color="rgba(171, 189, 219, 1)"
-                                        size={25}/>
+                                        size={25}
+                                    />
                                 }
                                 containerStyle={{ marginVertical: 10 }}
                                 onChangeText={email => this.setState({ email })}
@@ -135,10 +159,10 @@ export default class LoginScreen extends Component {
                             />
                         </View>
                         <Button
-                            title="LOG IN"
+                            title="REGISTER"
                             activeOpacity={1}
                             underlayColor="transparent"
-                            onPress={this._onPressLogin.bind(this)}
+                            onPress={this._onPressRegisterBtn.bind(this)}
                             loadingProps={{ size: 'small', color: 'white' }}
                             buttonStyle={{
                                 height: 50,
@@ -151,34 +175,7 @@ export default class LoginScreen extends Component {
                             containerStyle={{ marginVertical: 10 }}
                             titleStyle={{ fontWeight: 'bold', color: 'white' }}
                         />
-                        <Button
-                            title="MAIN SCREEN"
-                            activeOpacity={1}
-                            underlayColor="transparent"
-                            onPress={this._onTestLogin.bind(this)}
-                            loadingProps={{ size: 'small', color: 'white' }}
-                            buttonStyle={{
-                                height: 50,
-                                width: 250,
-                                backgroundColor: 'transparent',
-                                borderWidth: 2,
-                                borderColor: 'white',
-                                borderRadius: 30,
-                            }}
-                            containerStyle={{ marginVertical: 10 }}
-                            titleStyle={{ fontWeight: 'bold', color: 'white' }}
-                        />
-                        <View style={styles.footerView}>
-                            <Text style={{ color: 'grey' }}>New here?</Text>
-                            <Button
-                                title="Create an Account"
-                                type="clear"
-                                activeOpacity={0.5}
-                                titleStyle={{ color: 'white', fontSize: 15 }}
-                                containerStyle={{ marginTop: -10 }}
-                                onPress={this._onPressRegister.bind(this)}
-                            />
-                        </View>
+                       
                     </View>
                 </ImageBackground>
             </View>
@@ -199,23 +196,28 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    loginView: {
+    registerView: {
         marginTop: 150,
         backgroundColor: 'transparent',
         width: 250,
         height: 400,
     },
-    loginTitle: {
+    registerTitle: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },
-    headerText: {
+    travelText: {
         color: 'white',
         fontSize: 30,
         fontFamily: 'bold',
     },
-    loginInput: {
+    plusText: {
+        color: 'white',
+        fontSize: 30,
+        fontFamily: 'regular',
+    },
+    registerInput: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',

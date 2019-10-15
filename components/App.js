@@ -50,7 +50,6 @@ const reducer = (state = defaultState, action) => {
     case 'NAV':
       return { ...state, detailId: action.detailId };
     case 'CHANGE_LANGUAGE':
-      console.log(action.language)
       return { ...state, language: action.language };
     case 'TOGGLE_DONE':
       return { ...state, done: action.done };

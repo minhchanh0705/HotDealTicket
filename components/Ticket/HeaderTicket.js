@@ -10,7 +10,7 @@ class HeaderTicket extends Component {
         this.state = { language: '' };
     };
     saveLanguage = (language) => {
-        this.setState({ language: language });
+        this.setState({ language });
         this.props.dispatch({
             type: 'CHANGE_LANGUAGE',
             language: language
@@ -34,7 +34,7 @@ class HeaderTicket extends Component {
                         selectedValue={this.state.language}
                         onValueChange={this.saveLanguage}
                     >
-                        <Picker.Item label="Vietnamese" value="vn" />
+                        <Picker.Item label="Vietnamese" value="vi" />
                         <Picker.Item label="English" value="en" />
                     </Picker>
                 }

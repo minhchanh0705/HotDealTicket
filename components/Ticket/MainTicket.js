@@ -8,9 +8,7 @@ import { connect } from 'react-redux';
 const { width: screenWidth } = Dimensions.get('window')
 class MainTicket extends Component {
     static navigationOptions = {
-        header: (
-            <View/>
-        )
+        header: (<View/>)
     };
     render() {
         if (this.props.detailId != 0) {

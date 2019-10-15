@@ -1,23 +1,31 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { View, Text, ScrollView, Dimensions, Image, TouchableOpacity, StyleSheet, Animated, Easing } from 'react-native';
 import HTML from 'react-native-render-html';
 import { connect } from 'react-redux';
 import SvgAnimatedLinearGradient from 'react-native-svg-animated-linear-gradient';
-import {  Rect } from 'react-native-svg';
+import { Rect } from 'react-native-svg';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 import localization from 'moment/locale/vi';
 import NumberFormat from 'react-number-format';
+import AppText from '../../src/components/app-text';
+// import * as actions from '../../src/redux/actions/index';
 
 const { width: screenWidth } = Dimensions.get('window')
-class EventDetail extends Component {
+class EventDetail extends PureComponent {
+    constructor(props) {
+        super(props);
+        this.props.dispatch({
+            type: 'CHANGE_LANGUAGE',
+            language: this.props.language
+        })
+    };
+
     static navigationOptions = {
-        header: (
-            <View/>
-        )
+        header: (<View />)
     };
     state = {
-        fadeValue: new Animated.Value(0)
+        fadeValue: new Animated.Value(0),
     };
     _onPress = () => {
         Animated.timing(this.state.fadeValue, {
@@ -37,7 +45,6 @@ class EventDetail extends Component {
             title, from, to, timeTicket, nameTicket,
             priceTicket, partnerName, partnerDesc
         } = this.props.myDetail;
-        console.log('aaa ' + typeof ({ priceTicket }))
         from1 = timeTicket.substr(0, 10);
         to1 = timeTicket.substr(11, 20);
         let { myDone } = this.props;
@@ -94,7 +101,8 @@ class EventDetail extends Component {
                             <View>
                                 <TouchableOpacity >
                                     <View style={styles.button1}>
-                                        <Text style={styles.buttonText1}>MUA VÉ NGAY</Text>
+                                        <AppText i18nKey={'buy-now'} style={styles.buttonText1}></AppText>
+                                        {/* <Text style={styles.buttonText1}>MUA VÉ NGAY</Text> */}
                                     </View>
                                 </TouchableOpacity>
                             </View>
@@ -109,7 +117,8 @@ class EventDetail extends Component {
                                 }}>
                                     <View style={styles.button2}>
                                         <Icon name='facebook' size={20} color='#999999' />
-                                        <Text style={styles.buttonText2}>CHIA SẺ</Text>
+                                        <AppText i18nKey={'share'} style={styles.buttonText2}></AppText>
+                                        {/* <Text style={styles.buttonText2}>CHIA SẺ</Text> */}
                                     </View>
                                 </TouchableOpacity>
                                 <TouchableOpacity style={{
@@ -123,20 +132,23 @@ class EventDetail extends Component {
                                 }}>
                                     <View style={styles.button2}>
                                         <Icon name='calendar' size={20} color='#999999' />
-                                        <Text style={styles.buttonText2}>THÊM LỊCH</Text>
+                                        <AppText i18nKey={'add-cal'} style={styles.buttonText2}></AppText>
+                                        {/* <Text style={styles.buttonText2}>THÊM LỊCH</Text> */}
                                     </View>
                                 </TouchableOpacity>
                             </View>
                         </View>
                     </View>
                     <View style={styles.content}>
-                        <Text style={styles.header}>GIỚI THIỆU</Text>
+                        {/* <Text style={styles.header}>GIỚI THIỆU</Text> */}
+                        <AppText i18nKey={'introduction'} style={styles.header}></AppText>
 
                         <HTML html={description} imagesMaxWidth={Dimensions.get('window').width} />
                     </View>
 
                     <View style={styles.content}>
-                        <Text style={styles.header}>THÔNG TIN VÉ</Text>
+                        {/* <Text style={styles.header}>THÔNG TIN VÉ</Text> */}
+                        <AppText i18nKey={'ticket-information'} style={styles.header}></AppText>
                         <TouchableOpacity onPress={() => this._onPress()}>
                             <Text style={{ textTransform: 'uppercase', fontWeight: 'bold', color: 'gray' }}>
                                 {this.convert(from1)} - {this.convert(to1)}
@@ -155,7 +167,8 @@ class EventDetail extends Component {
                             {
                                 priceTicket && priceTicket == 1000 ?
                                     (
-                                        <Text style={styles.ticketText2}>FREE</Text>
+                                        // <Text style={styles.ticketText2}>FREE</Text>
+                                        <AppText i18nKey={'free'} style={styles.ticketText2}></AppText>
                                     ) : (
                                         <NumberFormat value={priceTicket} displayType={'text'} thousandSeparator={true}
                                             renderText={
@@ -168,7 +181,8 @@ class EventDetail extends Component {
                     </View>
 
                     <View style={styles.content}>
-                        <Text style={styles.header}>ĐƠN VỊ TỔ CHỨC</Text>
+                        {/* <Text style={styles.header}>ĐƠN VỊ TỔ CHỨC</Text> */}
+                        <AppText i18nKey={'organizational-unit'} style={styles.header}></AppText>
                         <Image style={{
                             width: screenWidth - 40,
                             height: screenWidth - 40,
@@ -183,7 +197,8 @@ class EventDetail extends Component {
                         <View>
                             <TouchableOpacity >
                                 <View style={styles.button3}>
-                                    <Text style={styles.buttonText3}>LIÊN HỆ NHÀ TỔ CHỨC</Text>
+                                    <AppText i18nKey={'contact-organization'} style={styles.buttonText3}></AppText>
+                                    {/* <Text style={styles.buttonText3}>LIÊN HỆ NHÀ TỔ CHỨC</Text> */}
                                 </View>
                             </TouchableOpacity>
                         </View>
@@ -198,10 +213,11 @@ function mapStatetoProps(state) {
     return {
         myDetailId: state.detailId,
         myDetail: state.detail,
-        myDone: state.done
+        myDone: state.done,
+        language: state.language
     };
-
 }
+
 export default connect(mapStatetoProps)(EventDetail);
 const styles = StyleSheet.create({
     container: {

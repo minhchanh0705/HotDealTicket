@@ -17,7 +17,7 @@ const defaultState = {
   banners: [],
   categories: [],
   events: [],
-  detailId: 0,
+  detailId:0,
   done: "false",
   detail: {
     title: '',

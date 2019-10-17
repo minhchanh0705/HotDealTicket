@@ -25,11 +25,10 @@ class MainTicket extends Component {
                 <View>
                     <HeaderTicket />
                 </View>
-                <View><Text>{this.props.language}</Text></View>
                 <View style={{ alignItems: 'center', height: 180, width: screenWidth, backgroundColor: '#e6e6e6' }}>
                     <Banner />
                 </View>
-                <View style={{ alignItems: 'center', backgroundColor: '#e6e6e6' }}>
+                <View style={{ alignItems: 'center', backgroundColor: '#fff' }}>
                     <Categories />
                 </View>
             </ScrollView>

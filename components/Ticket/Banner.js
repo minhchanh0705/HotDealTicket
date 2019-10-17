@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { View, Dimensions, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, Dimensions, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import axios from 'axios';
-import { Image } from 'react-native-elements';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { connect } from 'react-redux';
 const { width: screenWidth } = Dimensions.get('window')
@@ -22,13 +21,9 @@ class Banner extends Component {
                 })
             })
     }
-    _renderItem({ item }) {
+    _renderItem({ item, index }) {
         return (
-            <Image
-                source={{ uri: item.banner }}
-                style={{ width: screenWidth, height: 163 }}
-                PlaceholderContent={<ActivityIndicator />}
-            />
+            <Image source={{ uri: item.banner }} style={{ width: screenWidth, height: 163 }} />
         );
     }
     get pagination() {
@@ -38,7 +33,15 @@ class Banner extends Component {
             <Pagination
                 dotsLength={myBanners.length}
                 activeDotIndex={activeSlide}
-                containerStyle={{ paddingVertical: 5 }}
+                containerStyle={{ backgroundColor: '#fff', paddingVertical: 5 }}
+                dotStyle={{
+                    width: 9,
+                    height: 9,
+                    borderRadius: 5,
+                    backgroundColor: '#666666'
+                }}
+                inactiveDotOpacity={0.4}
+                inactiveDotScale={0.6}
             />
         );
     }
@@ -52,6 +55,7 @@ class Banner extends Component {
                     itemWidth={screenWidth}
                     onSnapToItem={(index) => this.setState({ activeSlide: index })}
                     loop={true}
+                    autoplay={true}
                 />
                 {this.pagination}
             </View>
@@ -67,11 +71,6 @@ export default connect(mapStatetoProps)(Banner);
 const styles = {
     container: {
         flex: 1
-    },
-    text: {
-        color: '#fff',
-        fontSize: 30,
-        fontWeight: 'bold'
     },
     image: {
         screenWidth,

@@ -61,7 +61,7 @@ class EventDetail extends PureComponent {
             );
         } else {
             return (
-                < ScrollView style={{ flex: 1, backgroundColor: '#d9d9d9' }}>
+                < ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
                     <View style={{ alignItems: 'center', height: 140, width: screenWidth }}>
                         <Image
                             style={{ width: screenWidth, height: 140 }}
@@ -80,15 +80,21 @@ class EventDetail extends PureComponent {
                         <Text style={{ flex: 1, fontSize: 19, fontWeight: 'bold' }}>{title}</Text>
                         <View style={{
                             flex: 1,
-                            paddingTop: 10,
+                            paddingTop: 5,
                             paddingRight: 10,
                         }}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <Icon name='clock-o' size={20} color='#e60000' />
-                                <Text style={{ fontSize: 16, marginLeft: 9 }}>
-                                    {this.convert(from)} - {this.convert(to)}
-                                </Text>
-                            </View>
+                            {
+                                from != '' ? (
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Icon name='clock-o' size={20} color='#e60000' />
+                                        <Text style={{ fontSize: 16, marginLeft: 9 }}>
+                                            {this.convert(from)} - {this.convert(to)}
+                                        </Text>
+                                    </View>
+                                ) : (
+                                        <Text></Text>
+                                    )
+                            }
                             <View style={{ flexDirection: 'row', marginTop: 7, marginBottom: 7 }}>
                                 <Icon name='map-marker' size={20} color='#e60000' />
                                 <View style={{ flexDirection: 'column' }}>
@@ -142,8 +148,15 @@ class EventDetail extends PureComponent {
                     <View style={styles.content}>
                         {/* <Text style={styles.header}>GIỚI THIỆU</Text> */}
                         <AppText i18nKey={'introduction'} style={styles.header}></AppText>
-
-                        <HTML html={description} imagesMaxWidth={Dimensions.get('window').width} />
+                        <HTML
+                            baseFontStyle={{
+                                fontSize: 12,
+                                fontFamily: 'Roboto',
+                                color: '#333333',
+                                lineHeight: 21
+                            }}
+                            html={description} imagesMaxWidth={Dimensions.get('window').width - 20} />
+                        {/* <HTML html={description} imagesMaxWidth={Dimensions.get('window').width} /> */}
                     </View>
 
                     <View style={styles.content}>

@@ -24,10 +24,10 @@ class EventsByCategory extends Component {
                 return res;
             })
     }
-    toDetailPage(id1) {
+    toDetailPage(id) {
         this.props.dispatch({
             type: 'NAV',
-            detailId: id1
+            detailId: id
         });
     }
     convertMonth(unixTimestamp) {
@@ -79,7 +79,7 @@ class EventsByCategory extends Component {
             return (
                 <View>
                     <View style={{
-                        backgroundColor: '#e6e6e6',
+                        backgroundColor: '#fff',
                         alignItems: 'center',
                         marginBottom: 10,
                         marginTop: 10,
@@ -94,7 +94,7 @@ class EventsByCategory extends Component {
                         data={data}
                         renderItem={({ item }) =>
                             <View style={{
-                                backgroundColor: '#d9d9d9',
+                                backgroundColor: '#fff',
                                 marginBottom: 10,
                                 marginLeft: 10,
                                 marginRight: 10,
@@ -110,7 +110,7 @@ class EventsByCategory extends Component {
                                             PlaceholderContent={<ActivityIndicator />}
                                             />
                                         <Text style={{
-                                            backgroundColor: '#d9d9d9',
+                                            backgroundColor: '#fff',
                                             fontWeight: 'bold',
                                             fontSize: 17,
                                             padding: 5,
@@ -133,7 +133,7 @@ class EventsByCategory extends Component {
                                                         fontWeight: 'bold',
                                                         fontSize: 18,
                                                         color: '#b32d00',
-                                                        backgroundColor: '#d9d9d9'
+                                                        backgroundColor: '#fff'
                                                     }}>
                                                         Free
                                                 </Text>
@@ -154,7 +154,7 @@ class EventsByCategory extends Component {
                                                                 fontWeight: 'bold',
                                                                 fontSize: 18,
                                                                 color: '#b32d00',
-                                                                backgroundColor: '#d9d9d9'
+                                                                backgroundColor: '#fff'
                                                             }}>{value}Đ</Text>
                                                         }
                                                     />
@@ -177,7 +177,7 @@ class EventsByCategory extends Component {
                                     }}>
                                         <Text style={{
                                             color: '#cc3300',
-                                            backgroundColor: '#d9d9d9',
+                                            backgroundColor: '#fff',
                                             borderStyle: 'solid',
                                             borderWidth: 1,
                                             borderColor: 'black',
@@ -195,7 +195,6 @@ class EventsByCategory extends Component {
                                         flex: 1,
                                         flexDirection: 'column',
                                         alignItems: 'center',
-                                        // borderStyle: 'solid',
                                         borderWidth: 0.8,
                                         borderColor: 'black',
                                         margin: 8
@@ -209,7 +208,7 @@ class EventsByCategory extends Component {
                                                 {this.convertMonth(item.datetime)}
                                             </Text>
                                         </View>
-                                        <View style={{ backgroundColor: '#d9d9d9', width: '100%', alignItems: 'center' }}>
+                                        <View style={{ backgroundColor: '#f2f2f2', width: '100%', alignItems: 'center' }}>
                                             <Text style={{ color: 'red', fontWeight: 'bold', fontSize: 25 }}>
                                                 {this.convertDay(item.datetime)}
                                             </Text>

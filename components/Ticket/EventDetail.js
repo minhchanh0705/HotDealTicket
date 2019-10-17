@@ -61,7 +61,7 @@ class EventDetail extends PureComponent {
             );
         } else {
             return (
-                < ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
+                < ScrollView style={{ flex: 1, backgroundColor: '#f2f2f2' }}>
                     <View style={{ alignItems: 'center', height: 140, width: screenWidth }}>
                         <Image
                             style={{ width: screenWidth, height: 140 }}

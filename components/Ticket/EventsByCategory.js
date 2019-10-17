@@ -106,7 +106,7 @@ class EventsByCategory extends Component {
                                     <View>
                                         <Image
                                             source={{ uri: item.banner }}
-                                            style={{ width: screenWidth - 20, height: 140 }} 
+                                            style={{ width: screenWidth - 22, height: 140 }} 
                                             PlaceholderContent={<ActivityIndicator />}
                                             />
                                         <Text style={{

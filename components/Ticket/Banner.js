@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, Dimensions, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, FlatList, Dimensions, TouchableOpacity, StyleSheet, Image, TouchableWithoutFeedback } from 'react-native';
 import axios from 'axios';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
+import Swiper from 'react-native-swiper';
 import { connect } from 'react-redux';
 const { width: screenWidth } = Dimensions.get('window')
 class Banner extends Component {
@@ -21,50 +22,38 @@ class Banner extends Component {
                 })
             })
     }
-    _renderItem({ item, index }) {
-        return (
-            <Image source={{ uri: item.banner }} style={{ width: screenWidth, height: 163 }} />
+   
+    renderBanner(listBanner) {
+        if (!listBanner) return null;
+        let imgBanner = listBanner.map((item, key) =>
+                <Image key={key} style={styles.image} source={{ uri: item.banner }} />
         );
-    }
-    get pagination() {
-        const { activeSlide } = this.state;
-        const { myBanners } = this.props;
+        if (!imgBanner) return null;
+
         return (
-            <Pagination
-                dotsLength={myBanners.length}
-                activeDotIndex={activeSlide}
-                containerStyle={{ backgroundColor: '#fff', paddingVertical: 5 }}
-                dotStyle={{
-                    width: 9,
-                    height: 9,
-                    borderRadius: 5,
-                    backgroundColor: '#666666'
-                }}
-                inactiveDotOpacity={0.4}
-                inactiveDotScale={0.6}
-            />
+            <Swiper
+                style={styles.wrapper}
+                loop={true}
+                autoplay={true}
+                autoplayTimeout={4}
+                height={150}
+                dot={<View style={{ backgroundColor: '#fff', width: 5, height: 5, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3 }} />}
+                activeDot={<View style={{ backgroundColor: '#666666', width: 8, height: 8, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3 }} />}
+                paginationStyle={{ bottom: 15 }}
+            >
+                {imgBanner}
+            </Swiper>
         );
     }
     render() {
         return (
-            <View style={styles.container}>
-                <Carousel
-                    data={this.props.myBanners}
-                    renderItem={this._renderItem}
-                    sliderWidth={screenWidth}
-                    itemWidth={screenWidth}
-                    onSnapToItem={(index) => this.setState({ activeSlide: index })}
-                    loop={true}
-                    autoplay={true}
-                />
-                {this.pagination}
-            </View>
+            this.renderBanner(this.props.MyBanners)
         );
     }
 }
 function mapStatetoProps(state) {
     return {
-        myBanners: state.banners
+        MyBanners: state.banners
     };
 }
 export default connect(mapStatetoProps)(Banner);
@@ -73,7 +62,28 @@ const styles = {
         flex: 1
     },
     image: {
-        screenWidth,
+        width: screenWidth,
         flex: 1
+    },
+    wrapper: {
+        alignItems: 'center', height: 180, width: screenWidth
+    },
+    slide1: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'red',
+    },
+    slide2: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#97CAE5',
+    },
+    slide3: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#92BB',
     }
 }

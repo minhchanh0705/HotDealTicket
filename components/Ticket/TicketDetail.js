@@ -72,15 +72,17 @@ class TicketDetail extends Component {
     }
     render() {
         const { navigation } = this.props;
-        const detailId1 = navigation.getParam('detailId1', 'NO-ID');
+        const detailId = navigation.getParam('detailId');
+        console.log('id: '+detailId)
         return (
-                <EventDetail detailId={JSON.stringify(detailId1)} /> 
+                <EventDetail 
+                // detailId={JSON.stringify(detailId)} 
+                /> 
         );
     }
 }
 function mapStatetoProps(state) {
         return {
-            myDetail: state.detail,
             myDetailId: state.detailId
         };
     // }

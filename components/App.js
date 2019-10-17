@@ -54,7 +54,6 @@ const reducer = (state = defaultState, action) => {
     case 'TOGGLE_DONE':
       return { ...state, done: action.done };
     case 'PASS_DETAIL':
-      console.log('timeTicket: ' + action.timeTicket)
       return {
         ...state,
         detail: {

@@ -13,13 +13,6 @@ import AppText from '../../src/components/app-text';
 
 const { width: screenWidth } = Dimensions.get('window')
 class EventDetail extends PureComponent {
-    constructor(props) {
-        super(props);
-        this.props.dispatch({
-            type: 'CHANGE_LANGUAGE',
-            language: this.props.language
-        })
-    };
 
     static navigationOptions = {
         header: (<View />)
@@ -43,7 +36,7 @@ class EventDetail extends PureComponent {
         let {
             place, address, ward, district, state, description,
             title, from, to, timeTicket, nameTicket,
-            priceTicket, partnerName, partnerDesc
+            priceTicket, partnerName
         } = this.props.myDetail;
         from1 = timeTicket.substr(0, 10);
         to1 = timeTicket.substr(11, 20);
@@ -224,10 +217,8 @@ class EventDetail extends PureComponent {
 }
 function mapStatetoProps(state) {
     return {
-        myDetailId: state.detailId,
         myDetail: state.detail,
-        myDone: state.done,
-        language: state.language
+        myDone: state.done
     };
 }
 

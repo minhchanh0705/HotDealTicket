@@ -1,3 +1,4 @@
+//get Ticket from API => send to Redux => EventDetail
 import React, { Component } from 'react';
 import axios from 'axios';
 import EventDetail from './EventDetail'
@@ -75,9 +76,7 @@ class TicketDetail extends Component {
         const detailId = navigation.getParam('detailId');
         console.log('id: '+detailId)
         return (
-                <EventDetail 
-                // detailId={JSON.stringify(detailId)} 
-                /> 
+                <EventDetail /> 
         );
     }
 }

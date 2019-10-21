@@ -1,3 +1,4 @@
+//get Categories from API => send to Redux => EventsByCategory
 import React, { Component } from 'react';
 import { View, Text, FlatList, Dimensions, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import axios from 'axios';

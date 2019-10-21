@@ -3,11 +3,12 @@ import { createAppContainer } from "react-navigation";
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import LoginScreen from '../LoginScreens/LoginScreen';
 import RegisterScreen from '../LoginScreens/RegisterScreen';
-import MainScreen from '../LoginScreens/MainScreen';
-import { createStackNavigator, HeaderBackButton, HeaderTitle } from "react-navigation-stack";
+import ProfileScreen from '../LoginScreens/ProfileScreen';
+import { createStackNavigator } from "react-navigation-stack";
 import MainTicket from '../../components/Ticket/MainTicket';
 import TicketDetail from '../../components/Ticket/TicketDetail';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {connect} from 'react-redux';
 
 const TicketStack = createStackNavigator({
   MainTicket: { screen: MainTicket },
@@ -17,7 +18,7 @@ const TicketStack = createStackNavigator({
 const LoginStack = createStackNavigator({
   LoginScreen: { screen: LoginScreen },
   RegisterScreen: { screen: RegisterScreen },
-  MainScreen: { screen: MainScreen }
+  ProfileScreen: { screen: ProfileScreen }
 });
 
 export default createAppContainer(createBottomTabNavigator(
@@ -27,6 +28,7 @@ export default createAppContainer(createBottomTabNavigator(
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
+
       tabBarIcon: ({ tintColor }) => {
         const { routeName } = navigation.state;
         if (routeName === 'Ticket') {
@@ -38,7 +40,7 @@ export default createAppContainer(createBottomTabNavigator(
       },
     }),
     tabBarOptions: {
-      activeTintColor: 'red',
+      activeTintColor: '#e60000',
       inactiveTintColor: 'gray',
     }
   },

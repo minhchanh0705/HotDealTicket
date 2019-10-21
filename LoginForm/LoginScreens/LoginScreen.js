@@ -7,6 +7,7 @@ import {
     ImageBackground,
     Dimensions
 } from 'react-native';
+import {connect} from 'react-redux';
 import { Input, Button, Icon } from 'react-native-elements';
 import AsyncStorage from '@react-native-community/async-storage';
 const BASE_URL = "http://api.ticket-staging.hotdeal.vn/api";
@@ -15,7 +16,7 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 const BG_IMAGE = require('../img/bg_screen1.jpg');
 
 var STORAGE_KEY = 'key_access_token';
-export default class LoginScreen extends Component {
+class LoginScreen extends Component {
     static navigationOptions = {
         header: (
             <View/>
@@ -32,10 +33,6 @@ export default class LoginScreen extends Component {
     _onPressRegister(event) {
         var { navigate } = this.props.navigation;
         navigate('RegisterScreen');
-    }
-    _onTestLogin(event) {
-        var { navigate } = this.props.navigation;
-        navigate('MainScreen');
     }
     _onPressLogin(event) {
         let serviceUrl = BASE_URL + "/user/login";
@@ -63,7 +60,12 @@ export default class LoginScreen extends Component {
                     try {
                         AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(responseJSON));
                         var { navigate } = this.props.navigation;
-                        navigate('MainScreen');
+                        this.props.dispatch({
+                            type: 'TOGGLE_LOGGED',            
+                            logged:true
+                        })
+                        navigate('ProfileScreen');
+                       
                     } catch (error) {
                         console.log('AsyncStorage error: ' + error.message);
                     }
@@ -144,6 +146,7 @@ export default class LoginScreen extends Component {
                             buttonStyle={{
                                 height: 50,
                                 width: 250,
+                                marginTop:20,
                                 backgroundColor: 'transparent',
                                 borderWidth: 2,
                                 borderColor: 'white',
@@ -152,23 +155,7 @@ export default class LoginScreen extends Component {
                             containerStyle={{ marginVertical: 10 }}
                             titleStyle={{ fontWeight: 'bold', color: 'white' }}
                         />
-                        <Button
-                            title="MAIN SCREEN"
-                            activeOpacity={1}
-                            underlayColor="transparent"
-                            onPress={this._onTestLogin.bind(this)}
-                            loadingProps={{ size: 'small', color: 'white' }}
-                            buttonStyle={{
-                                height: 50,
-                                width: 250,
-                                backgroundColor: 'transparent',
-                                borderWidth: 2,
-                                borderColor: 'white',
-                                borderRadius: 30,
-                            }}
-                            containerStyle={{ marginVertical: 10 }}
-                            titleStyle={{ fontWeight: 'bold', color: 'white' }}
-                        />
+                       
                         <View style={styles.footerView}>
                             <Text style={{ color: 'grey' }}>New here?</Text>
                             <Button
@@ -187,6 +174,8 @@ export default class LoginScreen extends Component {
     }
 }
 
+export default connect ()(LoginScreen);
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -201,15 +190,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     loginView: {
-        marginTop: 150,
+        marginTop: 100,
         backgroundColor: 'transparent',
         width: 250,
         height: 400,
     },
     loginTitle: {
-        flex: 1,
+        flex: 0.5,
         justifyContent: 'center',
         alignItems: 'center',
+        marginBottom:100
     },
     headerText: {
         color: 'white',

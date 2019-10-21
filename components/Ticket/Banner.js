@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, FlatList, Dimensions, TouchableOpacity, StyleSheet, Image, TouchableWithoutFeedback } from 'react-native';
 import axios from 'axios';
-import Carousel, { Pagination } from 'react-native-snap-carousel';
+
 import Swiper from 'react-native-swiper';
 import { connect } from 'react-redux';
 const { width: screenWidth } = Dimensions.get('window')
@@ -22,20 +22,20 @@ class Banner extends Component {
                 })
             })
     }
-   
+
     renderBanner(listBanner) {
         if (!listBanner) return null;
         let imgBanner = listBanner.map((item, key) =>
-                <Image key={key} style={styles.image} source={{ uri: item.banner }} />
+            <Image key={key} style={styles.image} source={{ uri: item.banner }} />
         );
         if (!imgBanner) return null;
-
-        return (
-            <Swiper
+        
+        return (           
+            <Swiper                
                 style={styles.wrapper}
                 loop={true}
                 autoplay={true}
-                autoplayTimeout={4}
+                autoplayTimeout={2}
                 height={150}
                 dot={<View style={{ backgroundColor: '#fff', width: 5, height: 5, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3 }} />}
                 activeDot={<View style={{ backgroundColor: '#666666', width: 8, height: 8, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3 }} />}
@@ -66,24 +66,7 @@ const styles = {
         flex: 1
     },
     wrapper: {
-        alignItems: 'center', height: 180, width: screenWidth
-    },
-    slide1: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'red',
-    },
-    slide2: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#97CAE5',
-    },
-    slide3: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#92BB',
+        height: 180, 
+        width: screenWidth
     }
 }

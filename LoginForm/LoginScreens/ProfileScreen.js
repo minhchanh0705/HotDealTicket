@@ -6,16 +6,17 @@ import {
     ImageBackground,
     Dimensions
 } from 'react-native';
+import {connect} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Input, Button, Icon } from 'react-native-elements';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 var STORAGE_KEY = 'key_access_token';
 const BG_IMAGE = require('../img/bg_screen1.jpg');
-export default class MainScreen extends Component {
+class ProfileScreen extends Component {
     static navigationOptions = {
         header: (
-            <View/>
+            <View />
         )
     };
     constructor(props) {
@@ -26,7 +27,7 @@ export default class MainScreen extends Component {
         try {
             AsyncStorage.getItem(STORAGE_KEY).then((user_data_json) => {
                 let userData = JSON.parse(user_data_json);
-                if (userData == undefined) {                    
+                if (userData == undefined) {
                     this.setState({
                         email: '',
                     });
@@ -34,7 +35,7 @@ export default class MainScreen extends Component {
                     this.setState({
                         email: userData.email,
                     });
-                    console.log('...'+this.state.email)
+                    console.log('...' + this.state.email)
                 }
             });
 
@@ -46,6 +47,10 @@ export default class MainScreen extends Component {
         try {
             AsyncStorage.removeItem(STORAGE_KEY);
             var { navigate } = this.props.navigation;
+            this.props.dispatch({
+                type: 'TOGGLE_LOGGED',            
+                logged:false
+            })
             navigate('LoginScreen');
         } catch (error) {
             console.log('AsyncStorage error: ' + error.message);
@@ -66,29 +71,35 @@ export default class MainScreen extends Component {
                             ) : <View></View>
                             }
                         </View>
-                        <Button
-                            title="LOG OUT"
-                            activeOpacity={1}
-                            underlayColor="transparent"
-                            onPress={this._onPressLogout.bind(this)}
-                            loadingProps={{ size: 'small', color: 'white' }}
-                            buttonStyle={{
-                                height: 50,
-                                width: 250,
-                                backgroundColor: 'transparent',
-                                borderWidth: 2,
-                                borderColor: 'white',
-                                borderRadius: 30
-                            }}
-                            containerStyle={{ marginVertical: 10 }}
-                            titleStyle={{ fontWeight: 'bold', color: 'white' }}
-                        />
+
+                        {this.state.email != '' ?
+                            (<Button
+                                title="LOG OUT"
+                                activeOpacity={1}
+                                underlayColor="transparent"
+                                onPress={this._onPressLogout.bind(this)}
+                                loadingProps={{ size: 'small', color: 'white' }}
+                                buttonStyle={{
+                                    height: 50,
+                                    width: 250,
+                                    backgroundColor: 'transparent',
+                                    borderWidth: 2,
+                                    borderColor: 'white',
+                                    borderRadius: 30
+                                }}
+                                containerStyle={{ marginVertical: 10 }}
+                                titleStyle={{ fontWeight: 'bold', color: 'white' }}
+                            />) :
+                            (<View></View>)
+                        }
                     </View>
                 </ImageBackground>
             </View>
         );
     }
 }
+
+export default connect ()(ProfileScreen);
 
 const styles = StyleSheet.create({
     container: {

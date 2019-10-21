@@ -13,12 +13,13 @@ export default class App extends Component {
   }
 }
 const defaultState = {
-  language:'vi',
+  language: 'vi',
   banners: [],
   categories: [],
   events: [],
-  detailId:0,
+  detailId: 0,
   done: "false",
+  logged: false,
   detail: {
     title: '',
     place: '',
@@ -53,6 +54,8 @@ const reducer = (state = defaultState, action) => {
       return { ...state, language: action.language };
     case 'TOGGLE_DONE':
       return { ...state, done: action.done };
+    case 'TOGGLE_LOGGED':
+      return { ...state, logged: action.logged };
     case 'PASS_DETAIL':
       return {
         ...state,

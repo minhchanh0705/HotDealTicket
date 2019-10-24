@@ -20,6 +20,14 @@ const defaultState = {
   detailId: 0,
   done: "false",
   logged: false,
+  filterDisplay: 'ACCOUNT',
+  filterAccount: 'INFO',
+  token: '',
+  acc: {
+    name: '',
+    email: '',
+    phone: '',
+  },
   detail: {
     title: '',
     place: '',
@@ -78,7 +86,18 @@ const reducer = (state = defaultState, action) => {
           partnerDesc: action.partnerDesc
         }
       };
-
+    case 'GET_TOKEN':
+      return { ...state, token: action.token };
+    case 'PASS_TOKEN':
+      return { ...state, acc: { name: action.name, email: action.email, phone: action.phone } };
+    case 'FILTER_ACCOUNT':
+      return { ...state, filterDisplay: 'ACCOUNT' };
+    case 'FILTER_ORDER':
+      return { ...state, filterDisplay: 'ORDER' };
+    case 'FILTER_INFO':
+      return { ...state, filterAccount: 'INFO' };
+    case 'FILTER_CHANGEPASS':
+      return { ...state, filterAccount: 'CHANGEPASS' };
   }
   return state;
 }

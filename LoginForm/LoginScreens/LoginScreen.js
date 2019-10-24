@@ -7,9 +7,10 @@ import {
     ImageBackground,
     Dimensions
 } from 'react-native';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import { Input, Button, Icon } from 'react-native-elements';
 import AsyncStorage from '@react-native-community/async-storage';
+import ProfileScreen from './ProfileScreen';
 const BASE_URL = "http://api.ticket-staging.hotdeal.vn/api";
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -19,12 +20,12 @@ var STORAGE_KEY = 'key_access_token';
 class LoginScreen extends Component {
     static navigationOptions = {
         header: (
-            <View/>
+            <View />
         )
     };
     constructor(props) {
         super(props);
-        
+
         this.state = {
             email: '',
             password: '',
@@ -34,13 +35,13 @@ class LoginScreen extends Component {
         var { navigate } = this.props.navigation;
         navigate('RegisterScreen');
     }
+
     _onPressLogin(event) {
         let serviceUrl = BASE_URL + "/user/login";
         let email = this.state.email;
         let password = this.state.password;
         var access_token = '';
-        console.log("email=" + email + "&password=" + password)
-        
+
         fetch(serviceUrl, {
             method: "POST",
 
@@ -50,22 +51,28 @@ class LoginScreen extends Component {
             },
             body: JSON.stringify({
                 email: email, password: password
-              }),
+            }),
         })
             .then((response) => response.json())
             .then((responseJSON) => {
                 access_token = responseJSON.token;
                 console.log("access_token=" + access_token)
+
                 if (access_token != undefined) {
                     try {
                         AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(responseJSON));
                         var { navigate } = this.props.navigation;
                         this.props.dispatch({
-                            type: 'TOGGLE_LOGGED',            
-                            logged:true
+                            type:'TOGGLE_LOGGED',
+                            logged: true     
                         })
+                        this.props.dispatch({
+                            type:'GET_TOKEN',
+                            token:access_token
+                        })
+
                         navigate('ProfileScreen');
-                       
+
                     } catch (error) {
                         console.log('AsyncStorage error: ' + error.message);
                     }
@@ -83,98 +90,110 @@ class LoginScreen extends Component {
         const { email, password } = this.state;
         return (
             <View style={styles.container}>
-                <ImageBackground source={BG_IMAGE} style={styles.bgImage}>
-                    <View style={styles.loginView}>
-                        <View style={styles.loginTitle}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <Text style={styles.headerText}>Login Form</Text>
-                            </View>
-                        </View>
-                        <View style={styles.loginInput}>
-                            <Input
-                                leftIcon={
-                                    <Icon
-                                        name="envelope-o"
-                                        type="font-awesome"
-                                        color="rgba(171, 189, 219, 1)"
-                                        size={25}/>
-                                }
-                                containerStyle={{ marginVertical: 10 }}
-                                onChangeText={email => this.setState({ email })}
-                                value={email}
-                                inputStyle={{ marginLeft: 10, color: 'white' }}
-                                keyboardAppearance="light"
-                                placeholder="Email"
-                                autoFocus={false}
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                returnKeyType="next"
-                                blurOnSubmit={false}
-                                placeholderTextColor="white"
-                                errorStyle={{ textAlign: 'center', fontSize: 12 }}
-                            />
-                            <Input
-                                leftIcon={
-                                    <Icon
-                                        name="lock"
-                                        type="font-awesome"
-                                        color="rgba(171, 189, 219, 1)"
-                                        size={25}
+                {
+                    this.props.logged == false ?
+                        (
+                            <ImageBackground source={BG_IMAGE} style={styles.bgImage}>
+                                <View style={styles.loginView}>
+                                    <View style={styles.loginTitle}>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <Text style={styles.headerText}>Login Form</Text>
+                                        </View>
+                                    </View>
+                                    <View style={styles.loginInput}>
+                                        <Input
+                                            leftIcon={
+                                                <Icon
+                                                    name="envelope-o"
+                                                    type="font-awesome"
+                                                    color="rgba(171, 189, 219, 1)"
+                                                    size={25} />
+                                            }
+                                            containerStyle={{ marginVertical: 10 }}
+                                            onChangeText={email => this.setState({ email })}
+                                            value={email}
+                                            inputStyle={{ marginLeft: 10, color: 'white' }}
+                                            keyboardAppearance="light"
+                                            placeholder="Email"
+                                            autoFocus={false}
+                                            autoCapitalize="none"
+                                            returnKeyType="next"
+                                            blurOnSubmit={false}
+                                            placeholderTextColor="white"
+                                            errorStyle={{ textAlign: 'center', fontSize: 12 }}
+                                        />
+                                        <Input
+                                            leftIcon={
+                                                <Icon
+                                                    name="lock"
+                                                    type="font-awesome"
+                                                    color="rgba(171, 189, 219, 1)"
+                                                    size={25}
+                                                />
+                                            }
+                                            containerStyle={{ marginVertical: 10 }}
+                                            onChangeText={password => this.setState({ password })}
+                                            value={password}
+                                            inputStyle={{ marginLeft: 10, color: 'white' }}
+                                            secureTextEntry={true}
+                                            keyboardAppearance="light"
+                                            placeholder="Password"
+                                            autoCapitalize="none"
+                                            autoCorrect={false}
+                                            keyboardType="default"
+                                            returnKeyType="done"
+                                            blurOnSubmit={true}
+                                            placeholderTextColor="white"
+                                        />
+                                    </View>
+                                    <Button
+                                        title="LOG IN"
+                                        activeOpacity={1}
+                                        underlayColor="transparent"
+                                        onPress={this._onPressLogin.bind(this)}
+                                        loadingProps={{ size: 'small', color: 'white' }}
+                                        buttonStyle={{
+                                            height: 50,
+                                            width: 250,
+                                            marginTop: 20,
+                                            backgroundColor: 'transparent',
+                                            borderWidth: 2,
+                                            borderColor: 'white',
+                                            borderRadius: 30,
+                                        }}
+                                        containerStyle={{ marginVertical: 10 }}
+                                        titleStyle={{ fontWeight: 'bold', color: 'white' }}
                                     />
-                                }
-                                containerStyle={{ marginVertical: 10 }}
-                                onChangeText={password => this.setState({ password })}
-                                value={password}
-                                inputStyle={{ marginLeft: 10, color: 'white' }}
-                                secureTextEntry={true}
-                                keyboardAppearance="light"
-                                placeholder="Password"
-                                autoCapitalize="none"
-                                autoCorrect={false}
-                                keyboardType="default"
-                                returnKeyType="done"
-                                blurOnSubmit={true}
-                                placeholderTextColor="white"
-                            />
-                        </View>
-                        <Button
-                            title="LOG IN"
-                            activeOpacity={1}
-                            underlayColor="transparent"
-                            onPress={this._onPressLogin.bind(this)}
-                            loadingProps={{ size: 'small', color: 'white' }}
-                            buttonStyle={{
-                                height: 50,
-                                width: 250,
-                                marginTop:20,
-                                backgroundColor: 'transparent',
-                                borderWidth: 2,
-                                borderColor: 'white',
-                                borderRadius: 30,
-                            }}
-                            containerStyle={{ marginVertical: 10 }}
-                            titleStyle={{ fontWeight: 'bold', color: 'white' }}
-                        />
-                       
-                        <View style={styles.footerView}>
-                            <Text style={{ color: 'grey' }}>New here?</Text>
-                            <Button
-                                title="Create an Account"
-                                type="clear"
-                                activeOpacity={0.5}
-                                titleStyle={{ color: 'white', fontSize: 15 }}
-                                containerStyle={{ marginTop: -10 }}
-                                onPress={this._onPressRegister.bind(this)}
-                            />
-                        </View>
-                    </View>
-                </ImageBackground>
+
+                                    <View style={styles.footerView}>
+                                        <Text style={{ color: 'grey' }}>New here?</Text>
+                                        <Button
+                                            title="Create an Account"
+                                            type="clear"
+                                            activeOpacity={0.5}
+                                            titleStyle={{ color: 'white', fontSize: 15 }}
+                                            containerStyle={{ marginTop: -10 }}
+                                            onPress={this._onPressRegister.bind(this)}
+                                        />
+                                    </View>
+                                </View>
+                            </ImageBackground>
+                        ) : (
+                            <ProfileScreen />
+                        )
+
+                }
             </View>
+
         );
     }
 }
-
-export default connect ()(LoginScreen);
+function mapStatetoProps(state) {
+    return {
+        logged: state.logged
+    };
+}
+export default connect(mapStatetoProps)(LoginScreen);
 
 const styles = StyleSheet.create({
     container: {
@@ -199,7 +218,7 @@ const styles = StyleSheet.create({
         flex: 0.5,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom:100
+        marginBottom: 100
     },
     headerText: {
         color: 'white',

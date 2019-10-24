@@ -28,5 +28,13 @@
     "logout": "Log Out",
     "titleRegister": "Register Form",
     "placeholderUser": "Username",
-    "register": "Register"
+    "register": "Register",
+    "orderManagement":"Order management",
+    "accountInformation":"Account information",
+    "OrderManagement":"ORDER MANAGEMENT",
+    "AccountInformation":"ACCOUNT INFORMATION",
+    "changePassword":"Change Password",
+    "personalInformation":"Personal Information",
+    "update":"Update",
+    "cancel":"Cancel"
 }

@@ -24,7 +24,7 @@ class MainTicket extends Component {
                 <View>
                     <HeaderTicket />
                 </View>
-                    <Banner />
+                <Banner />
                 <View style={{ alignItems: 'center', backgroundColor: '#fff' }}>
                     <Categories />
                 </View>

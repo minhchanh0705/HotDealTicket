@@ -29,5 +29,13 @@
     "titleRegister": "Đăng ký",
     "placeholderUser": "Tên tài khoản",
     "register": "Đăng ký",
-    "registerFail": "Đăng ký thất bại"
+    "registerFail": "Đăng ký thất bại",
+    "orderManagement":"Quản lý đơn hàng",
+    "accountInformation":"Thông tin tài khoản",
+    "OrderManagement":"QUẢN LÝ ĐƠN HÀNG",
+    "AccountInformation":"THÔNG TIN TÀI KHOẢN",
+    "changePassword":"Đổi mật khẩu",
+    "personalInformation":"Thông tin cá nhân",
+    "update":"Cập nhật",
+    "cancel":"Hủy"
 }

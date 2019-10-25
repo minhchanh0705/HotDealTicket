@@ -37,5 +37,12 @@
     "changePassword":"Đổi mật khẩu",
     "personalInformation":"Thông tin cá nhân",
     "update":"Cập nhật",
-    "cancel":"Hủy"
+    "cancel":"Hủy",
+    "codeOrder":"Mã ĐH",
+    "name":"Tên",
+    "event":"Sự kiện",
+    "date":"Ngày",
+    "total":"Tổng cộng",
+    "status":"Trạng thái"
+    	 			
 }

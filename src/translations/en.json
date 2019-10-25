@@ -36,5 +36,11 @@
     "changePassword":"Change Password",
     "personalInformation":"Personal Information",
     "update":"Update",
-    "cancel":"Cancel"
+    "cancel":"Cancel",
+    "codeOrder":"Order",
+    "name":"Name",
+    "event":"Event",
+    "date":"Date",
+    "total":"Total",
+    "status":"Status"
 }

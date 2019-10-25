@@ -9,13 +9,12 @@ import {
     ScrollView
 } from 'react-native';
 import { connect } from 'react-redux';
+import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Avatar, Icon } from 'react-native-elements';
 import i18n from "i18n-js";
 import memoize from "lodash.memoize";
 import * as RNLocalize from "react-native-localize";
-import AccountInfo from "../Profile/AccountInfo";
-import OrderManagement from "../Profile/OrderManagement";
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 var STORAGE_KEY = 'key_access_token';
@@ -49,38 +48,39 @@ class ProfileScreen extends PureComponent {
     };
     constructor(props) {
         super(props);
-        setI18nConfig();
-        this.state = {
-            email: '',
-        };
-        try {
-            AsyncStorage.getItem(STORAGE_KEY).then((user_data_json) => {
-                let userData = JSON.parse(user_data_json);
-                if (userData == undefined) {
-                    this.setState({
-                        email: '',
-                    });
-                } else {
-                    this.setState({
-                        email: userData.email,
-                    });
-                }
-            });
-
-        } catch (error) {
-            console.log('AsyncStorage error: ' + error.message);
-        }
+        setI18nConfig();     
+        this.getInfo(this.props.myToken);  
     }
-
-    getTextStyle(statusName) {
-        const { myFilterDisplay } = this.props;
-        if (statusName === myFilterDisplay) return { color: '#0059b3', flex: 1, fontSize: 15, paddingLeft: 8 };
-        return styles.buttonText;
+    getInfo(token) {
+        axios.get(`http://api.ticket-staging.hotdeal.vn/api/user/getUser?token=` + token)
+            .then(res => {
+                this.props.dispatch({
+                    type: 'PASS_TOKEN',
+                    name: res.data.user.name,
+                    email: res.data.user.email,
+                    phone: res.data.user.phone
+                })
+            })
     }
+    _onPressAccount(event) {
+        console.log("ok");
+        var { navigate } = this.props.navigation;
+        navigate('AccountInfo');
+    }
+    _onPressOrders(event) {
+        console.log("ok");
+        var { navigate } = this.props.navigation;
+        navigate('OrderManagement');
+    }
+    // getTextStyle(statusName) {
+    //     const { myFilterDisplay } = this.props;
+    //     if (statusName === myFilterDisplay) return { color: '#0059b3', flex: 1, fontSize: 15, paddingLeft: 8 };
+    //     return styles.buttonText;
+    // }
     getIconColor(statusName) {
         const { myFilterDisplay } = this.props;
         if (statusName === myFilterDisplay) return '#0059b3';
-        return '#4d4d4d';
+        return '#404040';
     }
 
     componentDidMount() {
@@ -126,7 +126,7 @@ class ProfileScreen extends PureComponent {
                         activeOpacity={0.7}
                         containerStyle={{ alignSelf: 'center', marginTop: 30 }}
                     />
-                    <Text style={styles.travelText}>{this.state.email}</Text>
+                    <Text style={styles.travelText}>{this.props.myAccount.name}</Text>
                 </View>
 
                 <View style={{
@@ -141,15 +141,21 @@ class ProfileScreen extends PureComponent {
                         padding: 12,
 
                     }}>
-                        <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => this.setFilterStatus('FILTER_ACCOUNT')}>
+                        <TouchableOpacity style={{ flexDirection: 'row' }} 
+                        // onPress={() => this.setFilterStatus('FILTER_ACCOUNT')}
+                        onPress={this._onPressAccount.bind(this)} 
+                        >
                             <Icon
                                 name='user'
                                 type='font-awesome'
                                 size={17}
-                                color={this.getIconColor('ACCOUNT')}
+                                // color={this.getIconColor('ACCOUNT')}
+                                color='#404040'
                                 onPress={() => console.log('hello')} />
                             <Text
-                                style={this.getTextStyle('ACCOUNT')}>
+                                // style={styles.buttonText}
+                                style={styles.buttonText}
+                                >
                                 {translate("accountInformation")}
                             </Text>
                         </TouchableOpacity>
@@ -159,15 +165,21 @@ class ProfileScreen extends PureComponent {
                         borderBottomWidth: 1,
                         padding: 12
                     }}>
-                        <TouchableOpacity style={{ flexDirection: 'row' }} onPress={() => this.setFilterStatus('FILTER_ORDER')}>
+                        <TouchableOpacity style={{ flexDirection: 'row' }} 
+                        // onPress={() => this.setFilterStatus('FILTER_ORDER')}
+                        onPress={this._onPressOrders.bind(this)} 
+                        >
                             <Icon
                                 name='bars'
                                 type='font-awesome'
                                 size={17}
-                                color={this.getIconColor('ORDER')}
+                                // color={this.getIconColor('ORDER')}
+                                color='#404040'
                                 onPress={() => console.log('hello')} />
                             <Text
-                                style={this.getTextStyle('ORDER')}>
+                                // style={this.getTextStyle('ORDER')}
+                                style={styles.buttonText}
+                                >
                                 {translate("orderManagement")}
                             </Text>
                         </TouchableOpacity>
@@ -179,11 +191,12 @@ class ProfileScreen extends PureComponent {
                             <Icon
                                 name='sign-out'
                                 type='font-awesome'
-                                color='#4d4d4d'
+                                color='#404040'
                                 size={17}
                                 onPress={() => console.log('hello')} />
                             <Text
-                                style={this.getTextStyle('logout')}>
+                                style={styles.buttonText}
+                                >
                                 {translate("logout")}
                             </Text>
                         </TouchableOpacity>
@@ -196,23 +209,16 @@ class ProfileScreen extends PureComponent {
                     paddingRight: 10,
                     
                 }}>
-                    {
-                        this.props.myFilterDisplay == 'ACCOUNT' ? (
-                            <AccountInfo />
-                        ) : (
-                            <OrderManagement />
-                            )
-                    }
                 </View>
-
-
             </ScrollView >
         );
     }
 }
 function mapStatetoProps(state) {
     return {
-        myFilterDisplay: state.filterDisplay
+        myFilterDisplay: state.filterDisplay,
+        myAccount: state.acc,
+        myToken: state.token
     };
 }
 export default connect(mapStatetoProps)(ProfileScreen);
@@ -240,7 +246,7 @@ const styles = StyleSheet.create({
         padding: 10
     },
     buttonText: {
-        color: '#4d4d4d',
+        color: '#404040',
         flex: 1,
         fontSize: 15,
         paddingLeft: 9

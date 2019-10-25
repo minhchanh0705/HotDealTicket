@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, I18nManager } from 'react-native';
+import { View, Text, StyleSheet, I18nManager,TouchableOpacity } from 'react-native';
 import i18n from "i18n-js";
 import memoize from "lodash.memoize";
 import * as RNLocalize from "react-native-localize";
@@ -46,7 +46,7 @@ export default class AccountInfo extends Component {
         return (
             <View style = { styles.content } >
                 <View style = { styles.header }>
-                    <Text style={styles.headerText}>{translate("AccountInformation")}</Text>
+                    <Text style={styles.headerText}>{translate("AccountInformation")}</Text>                    
                 </View>
                 <FilterAccount />
             </View>
@@ -58,10 +58,8 @@ export default class AccountInfo extends Component {
 const styles = StyleSheet.create({
     content: {
         margin: 10,
-        borderColor: '#a6a6a6',
-        borderWidth: 1,
-        borderStyle: 'solid',
-        backgroundColor: 'white'
+        padding:10,
+        height:400
     },
     header:{
         backgroundColor: '#e6e6e6',

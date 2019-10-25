@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, I18nManager, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, I18nManager, TextInput, Button } from 'react-native';
 import { connect } from 'react-redux';
 import i18n from "i18n-js";
-import axios from 'axios';
+
 import memoize from "lodash.memoize";
 import ConfigInfo from './ConfigInfo';
 import ChangePass from './ChangePass';
 import * as RNLocalize from "react-native-localize";
+// import { Button } from 'react-native-elements';
 const translationGetters = {
     en: () => require("./../../src/translations/en.json"),
     vi: () => require("./../../src/translations/vi.json")
@@ -33,19 +34,7 @@ class Filter extends Component {
         this.state = {
             email: '',
         };
-        this.getInfo(this.props.myToken);
     };
-    getInfo(token) {
-        axios.get(`http://api.ticket-staging.hotdeal.vn/api/user/getUser?token=`+token)
-            .then(res => {
-                this.props.dispatch({      
-                    type: 'PASS_TOKEN',
-                    name: res.data.user.name,
-                    email: res.data.user.email,
-                    phone: res.data.user.phone
-                })
-            })
-    }
     getTextStyle(statusName) {
         const { myFilterDisplay } = this.props;
         if (statusName === myFilterDisplay) return { flex: 1, fontSize: 15, paddingLeft: 8 };
@@ -69,12 +58,14 @@ class Filter extends Component {
     }
 
     setFilterStatus(actionType) {
+        console.log('filter')
         this.props.dispatch({ type: actionType });
     }
 
     render() {
         return (
             <View style={styles.container}>
+
                 <View style={styles.header}>
                     <TouchableOpacity onPress={() => this.setFilterStatus('FILTER_INFO')}>
                         <Text style={this.getTextStyle('INFO')}>{translate("personalInformation")}</Text>
@@ -90,7 +81,6 @@ class Filter extends Component {
                             <ChangePass></ChangePass>
                         )
                 }
-
             </View>
         );
     }
@@ -107,13 +97,13 @@ export default connect(mapStatetoProps)(Filter);
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,        
+        flex: 1,
     },
     header: {
         flexDirection: 'row',
-        alignItems: 'center',
-        alignContent: 'stretch',
-        padding: 5
+        marginVertical:10,
+        height:45,
+        padding: 5,
     },
     unSelectedText: {
         flex: 1,
@@ -127,8 +117,8 @@ const styles = StyleSheet.create({
         flex: 1,
         color: '#737373',
         fontSize: 17,
-        borderTopLeftRadius: 4,
-        borderTopRightRadius: 4,
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 5,
         padding: 5,
         borderTopWidth: 1,
         borderLeftWidth: 1,

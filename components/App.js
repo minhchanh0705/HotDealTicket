@@ -16,6 +16,7 @@ const defaultState = {
   language: 'vi',
   banners: [],
   categories: [],
+  orders:[],
   events: [],
   detailId: 0,
   done: "false",
@@ -54,6 +55,8 @@ const reducer = (state = defaultState, action) => {
       return { ...state, banners: action.banners };
     case 'PASS_CATEGORIES':
       return { ...state, categories: action.categories };
+      case 'PASS_ORDERS':
+      return { ...state, orders: action.orders };
     case 'PASS_EVENTS':
       return { ...state, events: action.events };
     case 'NAV':
@@ -89,6 +92,7 @@ const reducer = (state = defaultState, action) => {
     case 'GET_TOKEN':
       return { ...state, token: action.token };
     case 'PASS_TOKEN':
+      console.log('Name: '+action.name)
       return { ...state, acc: { name: action.name, email: action.email, phone: action.phone } };
     case 'FILTER_ACCOUNT':
       return { ...state, filterDisplay: 'ACCOUNT' };

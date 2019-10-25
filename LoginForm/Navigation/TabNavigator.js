@@ -7,6 +7,8 @@ import ProfileScreen from '../LoginScreens/ProfileScreen';
 import { createStackNavigator, HeaderBackButton, HeaderTitle } from "react-navigation-stack";
 import MainTicket from '../../components/Ticket/MainTicket';
 import TicketDetail from '../../components/Ticket/TicketDetail';
+import OrderManagement from '../Profile/OrderManagement';
+import AccountInfo from '../Profile/AccountInfo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const TicketStack = createStackNavigator({
@@ -17,7 +19,9 @@ const TicketStack = createStackNavigator({
 const LoginStack = createStackNavigator({
   LoginScreen: { screen: LoginScreen },
   RegisterScreen: { screen: RegisterScreen },
-  ProfileScreen: { screen: ProfileScreen }
+  ProfileScreen: { screen: ProfileScreen },
+  AccountInfo: { screen: AccountInfo },
+  OrderManagement: { screen: OrderManagement }
 });
 
 export default createAppContainer(createBottomTabNavigator(

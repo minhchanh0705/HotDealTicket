@@ -2,9 +2,10 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, I18nManager, TextInput, Alert } from 'react-native';
 import i18n from "i18n-js";
-import memoize from "lodash.memoize";
+
 import { connect } from 'react-redux';
 import axios from 'axios';
+import memoize from "lodash.memoize";
 import * as RNLocalize from "react-native-localize";
 import AsyncStorage from '@react-native-community/async-storage';
 var STORAGE_KEY = 'key_access_token';
@@ -34,7 +35,7 @@ class ConfigInfo extends Component {
         this.state = {
             name: this.props.myAccount.name,
             email: '',
-            phone: this.props.myAccount.phone
+            phone: this.props.myAccount.phone,
         }
 
     }
@@ -54,17 +55,8 @@ class ConfigInfo extends Component {
         this.state.phone = this.props.myAccount.phone
     };
     btn_update(event) {
-        axios.get(`http://api.ticket-staging.hotdeal.vn/api/user/getUser?token=` + this.props.myToken)
-            .then(res => {
-                this.props.dispatch({
-                    type: 'PASS_TOKEN',
-                    name: res.data.user.name,
-                    email: res.data.user.email,
-                    phone: res.data.user.phone
-                })
-
-            })
         let serviceUrl = BASE_URL + "/user/update?token=" + this.props.myToken;
+        console.log('name: ' + this.state.name);
         let name = this.state.name;
         let phone = this.state.phone;
         fetch(serviceUrl, {
@@ -80,8 +72,14 @@ class ConfigInfo extends Component {
         })
             .then((response) => response.json())
             .then((responseJSON) => {
+                this.setState({
+                    name: responseJSON.user.name,
+                    email: responseJSON.user.email,
+                    phone: responseJSON.user.phone
+                });
                 try {
                     AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(responseJSON));
+                    Alert.alert('Update Successful');
                 } catch (error) {
                     console.log('AsyncStorage error: ' + error.message);
                 }
@@ -89,29 +87,34 @@ class ConfigInfo extends Component {
             .catch((error) => {
                 console.warn(error);
             });
-    }
+        this.props.dispatch({
+            type: 'PASS_TOKEN',
+            name: this.state.name,
+            email: this.state.email,
+            phone: this.state.phone
+        })
+    };
     render() {
         return (
             <View style={styles.content}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Username"
-                        onChangeText={(name) => this.setState({ name })}
-                        value={this.state.name}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Email"
-                        editable={false}
-                        // onChangeText={(email) => this.setState({ email })}
-                        value={this.props.myAccount.email}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Phone Number"
-                        onChangeText={(phone) => this.setState({ phone })}
-                        value={this.state.phone}
-                    />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Username"
+                    onChangeText={(name) => this.setState({ name })}
+                    value={this.state.name}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Email"
+                    editable={false}
+                    value={this.props.myAccount.email}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Phone Number"
+                    onChangeText={(phone) => this.setState({ phone })}
+                    value={this.state.phone}
+                />
                 <View style={{ flexDirection: 'row-reverse' }}>
                     <TouchableOpacity
                         onPress={this.btn_update.bind(this)}
@@ -148,7 +151,7 @@ const styles = StyleSheet.create({
         margin: 5,
         padding: 5,
         backgroundColor: 'white',
-        height:400
+        height: 400
     },
     input: {
         height: 40,

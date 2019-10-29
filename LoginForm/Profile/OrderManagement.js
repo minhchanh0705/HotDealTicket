@@ -3,13 +3,16 @@ import { View, Text, StyleSheet, I18nManager, FlatList, Dimensions } from 'react
 import i18n from "i18n-js";
 import memoize from "lodash.memoize";
 import { connect } from 'react-redux';
+import { Icon } from "react-native-elements";
 import axios from 'axios';
 import * as RNLocalize from "react-native-localize";
+const { width: screenWidth } = Dimensions.get('window')
+
 const translationGetters = {
     en: () => require("./../../src/translations/en.json"),
     vi: () => require("./../../src/translations/vi.json")
 };
-const { width: screenWidth } = Dimensions.get('window')
+
 const translate = memoize(
     (key, config) => i18n.t(key, config),
     (config) => (config ? JSON.stringify(config) : '')
@@ -36,8 +39,15 @@ class OrderManagement extends Component {
             status: ''
         };
         this.loadOrder(this.props.myToken)
+    };
+    static navigationOptions = {
+        header: (
+            <View />
+        )
+    };
+    back(event){
+        this.props.navigation.navigate('ProfileScreen');
     }
-
     loadOrder(token) {
         axios.get(`http://api.ticket-staging.hotdeal.vn/api/order/getOrders`, {
             params: { token: token }
@@ -65,11 +75,22 @@ class OrderManagement extends Component {
     };
     render() {
         return (
-            <View style={styles.content}>
-
-                <Text style={styles.header}>{translate("OrderManagement")}</Text>
-
-                <View>
+            <View >
+                <View
+                    style={{
+                        backgroundColor: '#00aced',
+                        padding: 5,
+                        alignContent: 'space-around',
+                        flexDirection: 'row'
+                    }}>
+                    <Icon
+                        name='chevron-left'
+                        color='#fff'
+                        size={36} 
+                        onPress={this.back.bind(this)}/>
+                    <Text style={{ color: '#fff', fontSize: 20 }}>{translate("AccountInformation")}</Text>
+                </View>
+                <View style={styles.content}>
                     <FlatList
                         data={this.props.myOrders}
                         renderItem={({ item, index }) =>
@@ -124,7 +145,7 @@ class OrderManagement extends Component {
                                 </View>
                             </View>
                         }
-                        keyExtractor={item => item.id + ''}
+                        keyExtractor={(item, index) => index+''}
                     >
                     </FlatList>
                 </View>

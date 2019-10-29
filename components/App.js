@@ -92,7 +92,7 @@ const reducer = (state = defaultState, action) => {
     case 'GET_TOKEN':
       return { ...state, token: action.token };
     case 'PASS_TOKEN':
-      console.log('Name: '+action.name)
+      // console.log('Name: '+action.name)
       return { ...state, acc: { name: action.name, email: action.email, phone: action.phone } };
     case 'FILTER_ACCOUNT':
       return { ...state, filterDisplay: 'ACCOUNT' };

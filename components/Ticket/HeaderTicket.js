@@ -28,16 +28,16 @@ class HeaderTicket extends Component {
                     />
                 }
 
-                rightComponent={
-                    <Picker
-                        style={{ width: 150, height: 20, alignContent: 'flex-end' }}
-                        selectedValue={this.state.language}
-                        onValueChange={this.saveLanguage}
-                    >
-                        <Picker.Item label="Vietnamese" value="vi" />
-                        <Picker.Item label="English" value="en" />
-                    </Picker>
-                }
+                // rightComponent={
+                    // <Picker
+                    //     style={{ width: 150, height: 20, alignContent: 'flex-end' }}
+                    //     selectedValue={this.state.language}
+                    //     onValueChange={this.saveLanguage}
+                    // >
+                    //     <Picker.Item label="Vietnamese" value="vi" />
+                    //     <Picker.Item label="English" value="en" />
+                    // </Picker>
+                // }
 
             />
         );

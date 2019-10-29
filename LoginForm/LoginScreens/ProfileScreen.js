@@ -72,11 +72,6 @@ class ProfileScreen extends PureComponent {
         var { navigate } = this.props.navigation;
         navigate('OrderManagement');
     }
-    // getTextStyle(statusName) {
-    //     const { myFilterDisplay } = this.props;
-    //     if (statusName === myFilterDisplay) return { color: '#0059b3', flex: 1, fontSize: 15, paddingLeft: 8 };
-    //     return styles.buttonText;
-    // }
     getIconColor(statusName) {
         const { myFilterDisplay } = this.props;
         if (statusName === myFilterDisplay) return '#0059b3';
@@ -142,18 +137,15 @@ class ProfileScreen extends PureComponent {
 
                     }}>
                         <TouchableOpacity style={{ flexDirection: 'row' }} 
-                        // onPress={() => this.setFilterStatus('FILTER_ACCOUNT')}
                         onPress={this._onPressAccount.bind(this)} 
                         >
                             <Icon
                                 name='user'
                                 type='font-awesome'
                                 size={17}
-                                // color={this.getIconColor('ACCOUNT')}
                                 color='#404040'
                                 onPress={() => console.log('hello')} />
                             <Text
-                                // style={styles.buttonText}
                                 style={styles.buttonText}
                                 >
                                 {translate("accountInformation")}
@@ -166,18 +158,15 @@ class ProfileScreen extends PureComponent {
                         padding: 12
                     }}>
                         <TouchableOpacity style={{ flexDirection: 'row' }} 
-                        // onPress={() => this.setFilterStatus('FILTER_ORDER')}
                         onPress={this._onPressOrders.bind(this)} 
                         >
                             <Icon
                                 name='bars'
                                 type='font-awesome'
                                 size={17}
-                                // color={this.getIconColor('ORDER')}
                                 color='#404040'
                                 onPress={() => console.log('hello')} />
                             <Text
-                                // style={this.getTextStyle('ORDER')}
                                 style={styles.buttonText}
                                 >
                                 {translate("orderManagement")}

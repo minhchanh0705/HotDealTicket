@@ -1,8 +1,13 @@
+
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, I18nManager,TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, I18nManager, TextInput, Alert } from 'react-native';
 import i18n from "i18n-js";
 import memoize from "lodash.memoize";
+import { connect } from 'react-redux';
 import * as RNLocalize from "react-native-localize";
+import AsyncStorage from '@react-native-community/async-storage';
+var STORAGE_KEY = 'key_access_token';
+const BASE_URL = "http://api.ticket-staging.hotdeal.vn/api";
 const translationGetters = {
     en: () => require("./../../src/translations/en.json"),
     vi: () => require("./../../src/translations/vi.json")
@@ -22,14 +27,14 @@ const setI18nConfig = () => {
     i18n.translations = { [languageTag]: translationGetters[languageTag]() };
     i18n.locale = languageTag;
 };
-export default class ChangePass extends Component {
+class ChangePass extends Component {
     constructor(props) {
         super(props);
         setI18nConfig();
         this.state = {
-            name: '',
-            email: '',
-            phone: ''
+            password: '',
+            passwordNew: '',
+            rePassword: ''
         };
     }
     componentDidMount() {
@@ -43,30 +48,72 @@ export default class ChangePass extends Component {
         setI18nConfig();
         this.forceUpdate();
     };
+    btn_changepass(event) {
+        let serviceUrl = BASE_URL + "/user/changePassword?token=" + this.props.myToken;
+        console.log('name: ' + this.state.name);
+        let password = this.state.password;
+        let passwordNew = this.state.passwordNew;
+        let rePassword = this.state.rePassword;
+        
+        if(rePassword===passwordNew){
+        fetch(serviceUrl, {
+            method: "POST",
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                password: password,
+                passwordNew: passwordNew
+            }),
+        })
+            .then((response) => response.json())
+            .then((responseJSON) => {
+                this.setState({
+                    password: responseJSON.user.password,
+                    passwordNew: responseJSON.user.passwordNew
+                });
+                try {
+                    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(responseJSON));
+                    Alert.alert('Change Password Successful');
+                } catch (error) {
+                    console.log('AsyncStorage error: ' + error.message);
+                }
+            })
+            .catch((error) => {
+                console.warn(error);
+            });
+        }else{
+            Alert.alert('Confirm password was wrong!!!');
+        }
+    };
     render() {
         return (
             <View style={styles.content}>
                 <TextInput
                     style={styles.input}
                     placeholder="Pass"
-                    onChangeText={(name) => this.setState({ name })}
-                    value={this.state.name}
+                    secureTextEntry={true}
+                    onChangeText={(password) => this.setState({ password })}
+                    value={this.state.password}
                 />
                 <TextInput
                     style={styles.input}
                     placeholder="New Pass"
-                    onChangeText={(email) => this.setState({ email })}
-                    value={this.state.email}
+                    secureTextEntry={true}
+                    onChangeText={(passwordNew) => this.setState({ passwordNew })}
+                    value={this.state.passwordNew}
                 />
                 <TextInput
                     style={styles.input}
                     placeholder="Confirm"
-                    onChangeText={(phone) => this.setState({ phone })}
-                    value={this.state.phone}
+                    secureTextEntry={true}
+                    onChangeText={(rePassword) => this.setState({ rePassword })}
+                    value={this.state.rePassword}
                 />
                 <View style={{ flexDirection: 'row-reverse' }}>
                     <TouchableOpacity
-                        // onPress={this.btn_update.bind(this)}
+                        onPress={this.btn_changepass.bind(this)}
                         style={{
                             backgroundColor: '#ff3333', width: 100, alignItems: 'center', alignSelf: 'flex-end', marginTop: 18, marginBottom: 3
                         }}>
@@ -85,12 +132,21 @@ export default class ChangePass extends Component {
         );
     }
 }
+function mapStatetoProps(state) {
+    return {
+        myAccount: state.acc,
+        myToken: state.token
+    };
+}
+
+export default connect(mapStatetoProps)(ChangePass);
 
 const styles = StyleSheet.create({
     content: {
         margin: 5,
         padding: 5,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        height: 400
     },
     input: {
         height: 40,
@@ -99,3 +155,4 @@ const styles = StyleSheet.create({
         marginBottom: 4
     }
 });
+

@@ -1,23 +1,66 @@
-import React, { Component } from 'react';
-import { View, Text, ScrollView, Dimensions, Image, TouchableOpacity, StyleSheet, Animated, Easing } from 'react-native';
+import React, { PureComponent } from 'react';
+import {
+    I18nManager,
+    SafeAreaView,
+    View, Text, ScrollView, Dimensions, Image, TouchableOpacity, StyleSheet, Animated, Easing
+} from 'react-native';
 import HTML from 'react-native-render-html';
 import { connect } from 'react-redux';
 import SvgAnimatedLinearGradient from 'react-native-svg-animated-linear-gradient';
-import {  Rect } from 'react-native-svg';
+import { Rect } from 'react-native-svg';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import moment from 'moment';
 import localization from 'moment/locale/vi';
 import NumberFormat from 'react-number-format';
+import * as RNLocalize from "react-native-localize";
+import i18n from "i18n-js";
+import memoize from "lodash.memoize";
 
 const { width: screenWidth } = Dimensions.get('window')
-class EventDetail extends Component {
-    static navigationOptions = {
-        header: (
-            <View/>
-        )
+const translationGetters = {
+    en: () => require("./../../src/translations/en.json"),
+    vi: () => require("./../../src/translations/vi.json")
+};
+const translate = memoize(
+    (key, config) => i18n.t(key, config),
+    (config) => (config ? JSON.stringify(config) : '')
+);
+
+const setI18nConfig = () => {
+    const fallback = { languageTag: 'en', isRTL: false };
+
+    const { languageTag, isRTL } =
+        RNLocalize.findBestAvailableLanguage(Object.keys(translationGetters)) || fallback;
+    translate.cache.clear();
+    I18nManager.forceRTL(isRTL);
+    i18n.translations = { [languageTag]: translationGetters[languageTag]() };
+    i18n.locale = languageTag;
+};
+
+class EventDetail extends PureComponent {
+    constructor(props) {
+        super(props);
+        setI18nConfig();
+    }
+    componentDidMount() {
+        RNLocalize.addEventListener("change", this.handleLocalizationChange);
+    }
+
+    componentWillUnmount() {
+        RNLocalize.removeEventListener("change", this.handleLocalizationChange);
+    }
+    handleLocalizationChange = () => {
+        setI18nConfig();
+        this.forceUpdate();
     };
+
+
+    static navigationOptions = {
+        header: (<View />)
+    };
+
     state = {
-        fadeValue: new Animated.Value(0)
+        fadeValue: new Animated.Value(0),
     };
     _onPress = () => {
         Animated.timing(this.state.fadeValue, {
@@ -35,9 +78,8 @@ class EventDetail extends Component {
         let {
             place, address, ward, district, state, description,
             title, from, to, timeTicket, nameTicket,
-            priceTicket, partnerName, partnerDesc
+            priceTicket, partnerName
         } = this.props.myDetail;
-        console.log('aaa ' + typeof ({ priceTicket }))
         from1 = timeTicket.substr(0, 10);
         to1 = timeTicket.substr(11, 20);
         let { myDone } = this.props;
@@ -54,7 +96,7 @@ class EventDetail extends Component {
             );
         } else {
             return (
-                < ScrollView style={{ flex: 1, backgroundColor: '#d9d9d9' }}>
+                < ScrollView style={{ flex: 1, backgroundColor: '#f2f2f2' }}>
                     <View style={{ alignItems: 'center', height: 140, width: screenWidth }}>
                         <Image
                             style={{ width: screenWidth, height: 140 }}
@@ -73,15 +115,21 @@ class EventDetail extends Component {
                         <Text style={{ flex: 1, fontSize: 19, fontWeight: 'bold' }}>{title}</Text>
                         <View style={{
                             flex: 1,
-                            paddingTop: 10,
+                            paddingTop: 5,
                             paddingRight: 10,
                         }}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <Icon name='clock-o' size={20} color='#e60000' />
-                                <Text style={{ fontSize: 16, marginLeft: 9 }}>
-                                    {this.convert(from)} - {this.convert(to)}
-                                </Text>
-                            </View>
+                            {
+                                from != '' ? (
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Icon name='clock-o' size={20} color='#e60000' />
+                                        <Text style={{ fontSize: 16, marginLeft: 9 }}>
+                                            {this.convert(from)} - {this.convert(to)}
+                                        </Text>
+                                    </View>
+                                ) : (
+                                        <Text></Text>
+                                    )
+                            }
                             <View style={{ flexDirection: 'row', marginTop: 7, marginBottom: 7 }}>
                                 <Icon name='map-marker' size={20} color='#e60000' />
                                 <View style={{ flexDirection: 'column' }}>
@@ -93,9 +141,9 @@ class EventDetail extends Component {
                             </View>
                             <View>
                                 <TouchableOpacity >
-                                    <View style={styles.button1}>
-                                        <Text style={styles.buttonText1}>MUA VÉ NGAY</Text>
-                                    </View>
+                                    <SafeAreaView style={styles.button1}>
+                                        <Text style={styles.buttonText1}>{translate("buy-now")}</Text>
+                                    </SafeAreaView>
                                 </TouchableOpacity>
                             </View>
                             <View style={{ flexDirection: 'row', marginTop: 10 }}>
@@ -107,10 +155,11 @@ class EventDetail extends Component {
                                     borderStyle: 'solid',
                                     justifyContent: 'center'
                                 }}>
-                                    <View style={styles.button2}>
+                                    <SafeAreaView style={styles.button2}>
                                         <Icon name='facebook' size={20} color='#999999' />
-                                        <Text style={styles.buttonText2}>CHIA SẺ</Text>
-                                    </View>
+                                        <Text style={styles.buttonText2}>{translate("share")}</Text>
+                                    </SafeAreaView>
+
                                 </TouchableOpacity>
                                 <TouchableOpacity style={{
                                     flex: 1,
@@ -121,22 +170,33 @@ class EventDetail extends Component {
                                     borderBottomWidth: 1,
                                     borderStyle: 'solid'
                                 }}>
-                                    <View style={styles.button2}>
+                                    <SafeAreaView style={styles.button2}>
                                         <Icon name='calendar' size={20} color='#999999' />
-                                        <Text style={styles.buttonText2}>THÊM LỊCH</Text>
-                                    </View>
+                                        <Text style={styles.buttonText2}>{translate("add-cal")}</Text>
+                                    </SafeAreaView>
+
                                 </TouchableOpacity>
                             </View>
                         </View>
                     </View>
-                    <View style={styles.content}>
-                        <Text style={styles.header}>GIỚI THIỆU</Text>
+                    <SafeAreaView style={styles.content}>
 
-                        <HTML html={description} imagesMaxWidth={Dimensions.get('window').width} />
-                    </View>
+                        <Text style={styles.header}>{translate("introduction")}</Text>
 
-                    <View style={styles.content}>
-                        <Text style={styles.header}>THÔNG TIN VÉ</Text>
+                        <HTML
+                            baseFontStyle={{
+                                fontSize: 12,
+                                fontFamily: 'Roboto',
+                                color: '#333333',
+                                lineHeight: 21
+                            }}
+                            html={description} imagesMaxWidth={Dimensions.get('window').width - 20} />
+                    </SafeAreaView>
+
+                    <SafeAreaView style={styles.content}>
+
+                        <Text style={styles.header}>{translate("ticket-information")}</Text>
+
                         <TouchableOpacity onPress={() => this._onPress()}>
                             <Text style={{ textTransform: 'uppercase', fontWeight: 'bold', color: 'gray' }}>
                                 {this.convert(from1)} - {this.convert(to1)}
@@ -155,7 +215,9 @@ class EventDetail extends Component {
                             {
                                 priceTicket && priceTicket == 1000 ?
                                     (
-                                        <Text style={styles.ticketText2}>FREE</Text>
+                                        <SafeAreaView style={styles.safeArea}>
+                                            <Text style={styles.ticketText2}>{translate("free")}</Text>
+                                        </SafeAreaView>
                                     ) : (
                                         <NumberFormat value={priceTicket} displayType={'text'} thousandSeparator={true}
                                             renderText={
@@ -165,10 +227,12 @@ class EventDetail extends Component {
                                     )
                             }
                         </Animated.View>
-                    </View>
+                    </SafeAreaView>
 
-                    <View style={styles.content}>
-                        <Text style={styles.header}>ĐƠN VỊ TỔ CHỨC</Text>
+
+                    <SafeAreaView style={styles.content}>
+                        <Text style={styles.header}>{translate("organizational-unit")}</Text>
+
                         <Image style={{
                             width: screenWidth - 40,
                             height: screenWidth - 40,
@@ -183,11 +247,13 @@ class EventDetail extends Component {
                         <View>
                             <TouchableOpacity >
                                 <View style={styles.button3}>
-                                    <Text style={styles.buttonText3}>LIÊN HỆ NHÀ TỔ CHỨC</Text>
+                                    <SafeAreaView style={styles.safeArea}>
+                                        <Text style={styles.buttonText3}>{translate("contact-organization")}</Text>
+                                    </SafeAreaView>
                                 </View>
                             </TouchableOpacity>
                         </View>
-                    </View>
+                    </SafeAreaView>
                 </ScrollView >
 
             );
@@ -195,13 +261,14 @@ class EventDetail extends Component {
     }
 }
 function mapStatetoProps(state) {
-    return {
-        myDetailId: state.detailId,
-        myDetail: state.detail,
-        myDone: state.done
-    };
 
+    return {
+        myDetail: state.detail,
+        myDone: state.done,
+        language: state.language
+    };
 }
+
 export default connect(mapStatetoProps)(EventDetail);
 const styles = StyleSheet.create({
     container: {
@@ -286,5 +353,13 @@ const styles = StyleSheet.create({
         paddingBottom: 8,
         paddingTop: 8,
     },
-
+    safeArea: {
+        backgroundColor: "white",
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    value: {
+        fontSize: 18
+    }
 });

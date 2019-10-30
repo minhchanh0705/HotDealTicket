@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import Router from './Ticket/Router';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import TabNavigator from '../LoginForm/Navigation/TabNavigator';
@@ -14,11 +13,22 @@ export default class App extends Component {
   }
 }
 const defaultState = {
+  language: 'vi',
   banners: [],
   categories: [],
+  orders:[],
   events: [],
   detailId: 0,
   done: "false",
+  logged: false,
+  filterDisplay: 'ACCOUNT',
+  filterAccount: 'INFO',
+  token: '',
+  acc: {
+    name: '',
+    email: '',
+    phone: '',
+  },
   detail: {
     title: '',
     place: '',
@@ -45,14 +55,19 @@ const reducer = (state = defaultState, action) => {
       return { ...state, banners: action.banners };
     case 'PASS_CATEGORIES':
       return { ...state, categories: action.categories };
+      case 'PASS_ORDERS':
+      return { ...state, orders: action.orders };
     case 'PASS_EVENTS':
       return { ...state, events: action.events };
     case 'NAV':
       return { ...state, detailId: action.detailId };
+    case 'CHANGE_LANGUAGE':
+      return { ...state, language: action.language };
     case 'TOGGLE_DONE':
       return { ...state, done: action.done };
+    case 'TOGGLE_LOGGED':
+      return { ...state, logged: action.logged };
     case 'PASS_DETAIL':
-      console.log('timeTicket: ' + action.timeTicket)
       return {
         ...state,
         detail: {
@@ -74,7 +89,19 @@ const reducer = (state = defaultState, action) => {
           partnerDesc: action.partnerDesc
         }
       };
-
+    case 'GET_TOKEN':
+      return { ...state, token: action.token };
+    case 'PASS_TOKEN':
+      // console.log('Name: '+action.name)
+      return { ...state, acc: { name: action.name, email: action.email, phone: action.phone } };
+    case 'FILTER_ACCOUNT':
+      return { ...state, filterDisplay: 'ACCOUNT' };
+    case 'FILTER_ORDER':
+      return { ...state, filterDisplay: 'ORDER' };
+    case 'FILTER_INFO':
+      return { ...state, filterAccount: 'INFO' };
+    case 'FILTER_CHANGEPASS':
+      return { ...state, filterAccount: 'CHANGEPASS' };
   }
   return state;
 }

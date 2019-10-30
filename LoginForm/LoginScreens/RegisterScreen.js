@@ -9,11 +9,11 @@ import {
 } from 'react-native';
 import { Input, Button, Icon } from 'react-native-elements';
 import AsyncStorage from '@react-native-community/async-storage';
+var STORAGE_KEY = 'key_access_token';
 const BASE_URL = "http://api.ticket-staging.hotdeal.vn/api";
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const BG_IMAGE = require('../img/bg_screen1.jpg');
-var STORAGE_KEY = 'key_access_token';
 export default class RegisterScreen extends Component {
     static navigationOptions = {
         header: (
@@ -38,7 +38,6 @@ export default class RegisterScreen extends Component {
         var { navigate } = this.props.navigation;
         fetch(serviceUrl, {
             method: "POST",
-
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json'
